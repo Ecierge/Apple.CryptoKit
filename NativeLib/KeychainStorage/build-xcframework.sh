@@ -3,10 +3,13 @@ set -e
 
 SCHEME="KeychainStorage"
 OUTPUT_DIR="./build"
-NATIVE_LIB_DIR="../NativeLib"
+NATIVE_LIB_DIR="../../NativeLib"
 
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
+
+rm -rf "$NATIVE_LIB_DIR/KeychainStorage-ios.xcframework"
+rm -rf "$NATIVE_LIB_DIR/KeychainStorage-catalyst.xcframework"
 
 # iOS (Device)
 xcodebuild archive \
@@ -39,5 +42,10 @@ xcodebuild -create-xcframework \
   -framework "$OUTPUT_DIR/maccatalyst.xcarchive/Products/Library/Frameworks/$SCHEME.framework" \
   -output "$NATIVE_LIB_DIR/KeychainStorage-catalyst.xcframework"
 
-echo "CFrameworks built and copied to $NATIVE_LIB_DIR"
+echo "XCFrameworks built and copied to $NATIVE_LIB_DIR"
+
+# Build NuGet package
+dotnet pack ../../Apple.CryptoKit.csproj -c Release
+
+echo "NuGet package built in bin/Release"
 
