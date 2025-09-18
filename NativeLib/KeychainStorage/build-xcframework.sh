@@ -39,5 +39,5 @@ xcodebuild -create-xcframework \
   -framework "$OUTPUT_DIR/maccatalyst.xcarchive/Products/Library/Frameworks/$SCHEME.framework" \
   -output "$NATIVE_LIB_DIR/KeychainStorage-catalyst.xcframework"
 
-echo "✅ XCFrameworks созданы и скопированы в $NATIVE_LIB_DIR"
+echo "CFrameworks built and copied to $NATIVE_LIB_DIR"
 
