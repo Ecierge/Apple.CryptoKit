@@ -1,0 +1,38 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/roman/Library/Developer/Xcode/DerivedData/KeychainStorage-dwgadmfpmvokgubtkaepasppmcbl/Build/Intermediates.noindex/ArchiveIntermediates/KeychainStorage/InstallationBuildProductsLocation/Library/Frameworks/KeychainStorage.framework/KeychainStorage'
+relocations:
+  - { offset: 0x4DDFC, size: 0x8, addend: 0x0, symName: _KeychainStorageVersionString, symObjAddr: 0x0, symBinAddr: 0x2AF0, symSize: 0x0 }
+  - { offset: 0x4DE33, size: 0x8, addend: 0x0, symName: _KeychainStorageVersionNumber, symObjAddr: 0x38, symBinAddr: 0x2B28, symSize: 0x0 }
+  - { offset: 0x4DF5F, size: 0x8, addend: 0x0, symName: '_$sSD17dictionaryLiteralSDyxq_Gx_q_td_tcfCSS_ypTt0g5Tf4g_n', symObjAddr: 0x9DC, symBinAddr: 0x1664, symSize: 0x104 }
+  - { offset: 0x4E3B1, size: 0x8, addend: 0x0, symName: '_$ss22__RawDictionaryStorageC4findys10_HashTableV6BucketV6bucket_Sb5foundtxSHRzlFSS_Tg5', symObjAddr: 0x2EC, symBinAddr: 0xF74, symSize: 0x64 }
+  - { offset: 0x4E40A, size: 0x8, addend: 0x0, symName: '_$ss17_NativeDictionaryV7_insert2at3key5valueys10_HashTableV6BucketV_xnq_ntFSS_ypTg5', symObjAddr: 0x350, symBinAddr: 0xFD8, symSize: 0x68 }
+  - { offset: 0x4E499, size: 0x8, addend: 0x0, symName: '_$ss17_NativeDictionaryV8setValue_6forKey8isUniqueyq_n_xSbtFSS_ypTg5', symObjAddr: 0x3B8, symBinAddr: 0x1040, symSize: 0x12C }
+  - { offset: 0x4E514, size: 0x8, addend: 0x0, symName: '_$ss22__RawDictionaryStorageC4find_9hashValues10_HashTableV6BucketV6bucket_Sb5foundtx_SitSHRzlFSS_Tg5', symObjAddr: 0x4E4, symBinAddr: 0x116C, symSize: 0xB4 }
+  - { offset: 0x4E576, size: 0x8, addend: 0x0, symName: '_$ss17_NativeDictionaryV4copyyyFSS_ypTg5', symObjAddr: 0x598, symBinAddr: 0x1220, symSize: 0x198 }
+  - { offset: 0x4E63F, size: 0x8, addend: 0x0, symName: '_$ss17_NativeDictionaryV20_copyOrMoveAndResize8capacity12moveElementsySi_SbtFSS_ypTg5', symObjAddr: 0x730, symBinAddr: 0x13B8, symSize: 0x2AC }
+  - { offset: 0x4E837, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0CMa', symObjAddr: 0x18B0, symBinAddr: 0x2538, symSize: 0x20 }
+  - { offset: 0x4E84B, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataV15_RepresentationOWOe', symObjAddr: 0x18D0, symBinAddr: 0x2558, symSize: 0x40 }
+  - { offset: 0x4E85F, size: 0x8, addend: 0x0, symName: '_$sS2SSysWl', symObjAddr: 0x1910, symBinAddr: 0x2598, symSize: 0x40 }
+  - { offset: 0x4E873, size: 0x8, addend: 0x0, symName: ___swift_instantiateConcreteTypeFromMangledName, symObjAddr: 0x1950, symBinAddr: 0x25D8, symSize: 0x44 }
+  - { offset: 0x4E887, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataVSgWOe', symObjAddr: 0x1994, symBinAddr: 0x261C, symSize: 0x14 }
+  - { offset: 0x4E89B, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataVSgWOy', symObjAddr: 0x19BC, symBinAddr: 0x2644, symSize: 0x14 }
+  - { offset: 0x4E8AF, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataV15_RepresentationOWOy', symObjAddr: 0x19D0, symBinAddr: 0x2658, symSize: 0x40 }
+  - { offset: 0x4E8C3, size: 0x8, addend: 0x0, symName: '_$sypWOb', symObjAddr: 0x1A10, symBinAddr: 0x2698, symSize: 0x10 }
+  - { offset: 0x4E8D7, size: 0x8, addend: 0x0, symName: ___swift_destroy_boxed_opaque_existential_0, symObjAddr: 0x1A34, symBinAddr: 0x26BC, symSize: 0x20 }
+  - { offset: 0x4E8EB, size: 0x8, addend: 0x0, symName: '_$sypWOc', symObjAddr: 0x1A54, symBinAddr: 0x26DC, symSize: 0x3C }
+  - { offset: 0x4E8FF, size: 0x8, addend: 0x0, symName: '_$sSS_yptWOc', symObjAddr: 0x1A90, symBinAddr: 0x2718, symSize: 0x48 }
+  - { offset: 0x4E927, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C10isKeyExist7keyName0D6PublicSbSS_SbtFZ', symObjAddr: 0x0, symBinAddr: 0xC88, symSize: 0x30 }
+  - { offset: 0x4EA30, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C10isKeyExist7keyName0D6PublicSbSS_SbtFZTo', symObjAddr: 0x30, symBinAddr: 0xCB8, symSize: 0x4C }
+  - { offset: 0x4EAAB, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C6getKey3tag8isPublic10Foundation4DataVSS_SbtFZ', symObjAddr: 0x7C, symBinAddr: 0xD04, symSize: 0x58 }
+  - { offset: 0x4EB5F, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C6getKey3tag8isPublic10Foundation4DataVSS_SbtFZTo', symObjAddr: 0xD4, symBinAddr: 0xD5C, symSize: 0x9C }
+  - { offset: 0x4EBD1, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C30createRSAKeyAnsStoreInkeychain3tag9algorithm7keySize8isPublic0K5Usage9overwrite10Foundation4DataVSS_SSSiS3btFZ', symObjAddr: 0x170, symBinAddr: 0xDF8, symSize: 0x4 }
+  - { offset: 0x4EBEC, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C30createRSAKeyAnsStoreInkeychain3tag9algorithm7keySize8isPublic0K5Usage9overwrite10Foundation4DataVSS_SSSiS3btFZTo', symObjAddr: 0x174, symBinAddr: 0xDFC, symSize: 0xBC }
+  - { offset: 0x4EC16, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0CACycfC', symObjAddr: 0x230, symBinAddr: 0xEB8, symSize: 0x20 }
+  - { offset: 0x4EC2A, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0CACycfc', symObjAddr: 0x250, symBinAddr: 0xED8, symSize: 0x30 }
+  - { offset: 0x4EC62, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0CACycfcTo', symObjAddr: 0x280, symBinAddr: 0xF08, symSize: 0x3C }
+  - { offset: 0x4EC9E, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0CfD', symObjAddr: 0x2BC, symBinAddr: 0xF44, symSize: 0x30 }
+  - { offset: 0x4ED31, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C7findKey7keyName8isPublicSo03SecE3RefaSgSS_SbtFZTf4nnd_n', symObjAddr: 0xAE0, symBinAddr: 0x1768, symSize: 0x3FC }
+  - { offset: 0x4EF64, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C9exportKey03secE08isPublic10Foundation4DataVSo03SecE3Refa_SbtFZTf4nnd_n', symObjAddr: 0xEDC, symBinAddr: 0x1B64, symSize: 0x190 }
+  - { offset: 0x4F0E4, size: 0x8, addend: 0x0, symName: '_$s15KeychainStorage010ACKeychainB0C30createRSAKeyAnsStoreInkeychain3tag9algorithm7keySize8isPublic0K5Usage9overwrite10Foundation4DataVSS_SSSiS3btFZTf4nnnnnnd_n', symObjAddr: 0x106C, symBinAddr: 0x1CF4, symSize: 0x844 }
+...
