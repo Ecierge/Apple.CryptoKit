@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		P2pBuku4YN0v/FqRxB6joFxdvYM=
+		1ZBquFXhkmcFMhV7VOuOFGYiBhU=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -18,88 +18,74 @@
 			94t9zTMEQbtplVfMxvmTNgwyPZWIg2pZgT6JX/GSRgo=
 			</data>
 		</dict>
-		<key>Modules/KeychainStorage.swiftmodule/Project/arm64-apple-ios-macabi.swiftsourceinfo</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			THc1GIAONzgUo8jG+qiD7gNNpci/l0vZ9xCQXW3edR0=
-			</data>
-		</dict>
-		<key>Modules/KeychainStorage.swiftmodule/Project/x86_64-apple-ios-macabi.swiftsourceinfo</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			lrn05IwGpHqaVwZzCOSXVp65xB3YgoLkJV85veKXh3k=
-			</data>
-		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios-macabi.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			uDwuAIcRf+CaJYcKJvQafZWEsHLlKf61RK570Qoe/XQ=
+			5+qbIU9iRWEi/+mvqcU2Ik3PqEp0m9N5QS05f9FSOBE=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios-macabi.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			aEFqfrsVNF/q8hdpjarKi9B+OsUCAZ5I8mGk6Ady8xA=
+			NefFbpV43m53BGSPSidYvXInvMPS0NwcTZ0M/aYJKpo=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios-macabi.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			u0PYk1XECinP9PyTVhszmmC/Ij2Yoqen4lttfQeFQSw=
+			6E7VPXoLR99tKkoHm/ZNSUDhpo3m24fdpKk37UdfB2k=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios-macabi.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			aEFqfrsVNF/q8hdpjarKi9B+OsUCAZ5I8mGk6Ady8xA=
+			NefFbpV43m53BGSPSidYvXInvMPS0NwcTZ0M/aYJKpo=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios-macabi.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			uhxFm65phJKu7HKwh+uwuu11XmuSjdWa0SWUdG/ogTE=
+			YAj4LYug9Umm1QbsqHnAoWRL+RHXhfnbQOnP7QIn4/A=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/x86_64-apple-ios-macabi.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			uDwuAIcRf+CaJYcKJvQafZWEsHLlKf61RK570Qoe/XQ=
+			5+qbIU9iRWEi/+mvqcU2Ik3PqEp0m9N5QS05f9FSOBE=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/x86_64-apple-ios-macabi.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			EkijIJO0fZYaZJv3GPTK+tXTeqa5RN+nG2izqMdgoqQ=
+			IL9kpsIQFA5dSh+nz+dSpAO3W6CTwznPqO1ZQi4HsxM=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/x86_64-apple-ios-macabi.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			jYqN3g+I65AdzbvjLsKJU15G+9OLy5nj7Tskqt7gVQI=
+			Wc3bPXXdVaVYHAXejtskE6YX0E2NsM2a5s610l1ZaEk=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/x86_64-apple-ios-macabi.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			EkijIJO0fZYaZJv3GPTK+tXTeqa5RN+nG2izqMdgoqQ=
+			IL9kpsIQFA5dSh+nz+dSpAO3W6CTwznPqO1ZQi4HsxM=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/x86_64-apple-ios-macabi.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8JQivk3N4di/gPlAZzA++Ek6TqzfbaxalW1ht28TzNA=
+			UxEPJwa+shfOlVGZkjiowHXKTb8B5zzFanrjsSlkATg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -113,7 +99,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6gcHlXbx9FPgj8yMXShsSGIM865XhcDryeA8EDe6Eko=
+			eMNDjeWaGVh6mzUirYksFFM39ERZh2qwF0uv0qCf604=
 			</data>
 		</dict>
 	</dict>

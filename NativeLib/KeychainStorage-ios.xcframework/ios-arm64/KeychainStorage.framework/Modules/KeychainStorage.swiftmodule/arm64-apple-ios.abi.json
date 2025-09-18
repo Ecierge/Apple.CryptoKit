@@ -162,83 +162,6 @@
             "funcSelfKind": "NonMutating"
           },
           {
-            "kind": "Function",
-            "name": "findKey",
-            "printedName": "findKey(keyName:isPublic:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "Security.SecKey?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "SecKey",
-                    "printedName": "Security.SecKey",
-                    "usr": "c:@T@SecKeyRef"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:15KeychainStorage010ACKeychainB0C7findKey7keyName8isPublicSo03SecE3RefaSgSS_SbtFZ",
-            "mangledName": "$s15KeychainStorage010ACKeychainB0C7findKey7keyName8isPublicSo03SecE3RefaSgSS_SbtFZ",
-            "moduleName": "KeychainStorage",
-            "static": true,
-            "declAttributes": [
-              "Final",
-              "RawDocComment"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "exportKey",
-            "printedName": "exportKey(secKey:isPublic:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Data",
-                "printedName": "Foundation.Data",
-                "usr": "s:10Foundation4DataV"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "SecKey",
-                "printedName": "Security.SecKey",
-                "usr": "c:@T@SecKeyRef"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:15KeychainStorage010ACKeychainB0C9exportKey03secE08isPublic10Foundation4DataVSo03SecE3Refa_SbtFZ",
-            "mangledName": "$s15KeychainStorage010ACKeychainB0C9exportKey03secE08isPublic10Foundation4DataVSo03SecE3Refa_SbtFZ",
-            "moduleName": "KeychainStorage",
-            "static": true,
-            "declAttributes": [
-              "Final"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
             "kind": "Constructor",
             "name": "init",
             "printedName": "init()",
@@ -269,7 +192,6 @@
         "usr": "c:@M@KeychainStorage@objc(cs)ACKeychainStorage",
         "mangledName": "$s15KeychainStorage010ACKeychainB0C",
         "moduleName": "KeychainStorage",
-        "isOpen": true,
         "objc_name": "ACKeychainStorage",
         "declAttributes": [
           "AccessControl",

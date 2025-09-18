@@ -10,31 +10,27 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		//Eox+d0HMji5877N/IfG1NL6bQ=
-		</data>
-		<key>Modules/KeychainStorage.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
-		<data>
-		jn53jfIZM4qf1xmueQH3ehiw9Do=
+		lLPf311F8Sq0WztyGvRUeDoAcNo=
 		</data>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		n5514m6VwQPETJU76n4TvBkbouM=
+		WNtP7b2Fa4XvbLvdJK2TDQofu/E=
 		</data>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		ZIghflChl6mBn1ZT6kwjI6BGy34=
+		EGBPIu1XB1nSAIBRjDKaI6IBNhw=
 		</data>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		T3apeotwnzK//DLq4kv09kdNmsw=
+		w9Nwt8X8AZahVKCnqNsPZHWtFns=
 		</data>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		ZIghflChl6mBn1ZT6kwjI6BGy34=
+		EGBPIu1XB1nSAIBRjDKaI6IBNhw=
 		</data>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		2hlGFu1gRy1fikwvu5Y+eKdAZZ4=
+		WX7tGHNQ+MuHVlprbDo5YuNefQ4=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -50,46 +46,39 @@
 			94t9zTMEQbtplVfMxvmTNgwyPZWIg2pZgT6JX/GSRgo=
 			</data>
 		</dict>
-		<key>Modules/KeychainStorage.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			C1tLCXs40RFg6tKvLx2ws0JrTCI62Or87s1r64uFLw4=
-			</data>
-		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			uDwuAIcRf+CaJYcKJvQafZWEsHLlKf61RK570Qoe/XQ=
+			5+qbIU9iRWEi/+mvqcU2Ik3PqEp0m9N5QS05f9FSOBE=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			1Fvulo4Xf7HVyqPCTS8laXjuwj5Q+00QD48JU1HONkw=
+			NkvA2T9pA2LAU7OkaQdhwH5Jk1xYhysNVeabr8R1cE4=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			osB4BkkLQBPtpP80APB7Qraf+nlEPFOisXnMEqv6frY=
+			Jo7Odt7YQN0BINuj3dJlc1fb/DzVZaGAvFewuA2By3c=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			1Fvulo4Xf7HVyqPCTS8laXjuwj5Q+00QD48JU1HONkw=
+			NkvA2T9pA2LAU7OkaQdhwH5Jk1xYhysNVeabr8R1cE4=
 			</data>
 		</dict>
 		<key>Modules/KeychainStorage.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZGSYuTqZKiBtqTGz6DZz5Z+VCeFKn+bvd5phMRbEMi8=
+			5xmZ1F1d6IM7HxXyr2BJbTvh/lVcMcioNMla2Q681V0=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
