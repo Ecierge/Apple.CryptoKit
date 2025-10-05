@@ -1,0 +1,41 @@
+<!--
+This file allows overriding of properties for all projects in the directory.
+See https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022#directorybuildprops-and-directorybuildtargets
+ -->
+
+<Project>
+  <PropertyGroup>
+    <PackageTags>Apple;CryptoKit;CGN</PackageTags>
+    <PackageProjectUrl>https://github.com/Ecierge/Apple.CryptoKit</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!--<PackageIcon>logo.png</PackageIcon>-->
+    <!--https://docs.microsoft.com/en-gb/nuget/reference/msbuild-targets#packagereadmefile -->
+    <RepositoryType>git</RepositoryType>
+    <Authors>XperiAndri, alekseybailo, DrBrown777</Authors>
+    <RepositoryUrl>https://github.com/Ecierge/Apple.CryptoKit</RepositoryUrl>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyBaseName>Ecierge.$(MSBuildProjectName)</AssemblyBaseName>
+    <LangVersion Condition="'$(MSBuildProjectExtension)'=='.csproj'">13.0</LangVersion>
+    <LangVersion Condition="'$(MSBuildProjectExtension)'=='.fsproj'">9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="/"/>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="/"/>
+    <!--<None Include="$(MSBuildThisFileDirectory)docsSrc\content\logo.png" Pack="true" PackagePath="/" />-->
+  </ItemGroup>
+
+</Project>

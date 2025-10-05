@@ -1,0 +1,9 @@
+{
+  "solution": {
+    "path": "Apple.CryptoKit.slnx",
+    "projects": [
+      "src\\Apple.CryptoKit.csproj",
+      "tests\\Apple.CryptoKit.Tests.csproj"
+    ]
+  }
+}
