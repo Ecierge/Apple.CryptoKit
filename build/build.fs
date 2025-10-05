@@ -687,7 +687,6 @@ let initTargets (ctx : Context.FakeExecutionContext) =
 
     "DotnetBuild" ==>! "BuildDocs"
 
-
     "DotnetBuild" ==>! "WatchDocs"
 
     "DotnetTest" ==> "GenerateCoverageReport"
@@ -698,8 +697,10 @@ let initTargets (ctx : Context.FakeExecutionContext) =
     ==> "GitRelease"
     ==>! "Release"
 
-    "DotnetRestore" =?> ("CheckFormatCode", isCI.Value)
-    ==> "DotnetWorkloadRestore"
+    "DotnetWorkloadRestore" ==>! "DotnetRestore"
+
+    "DotnetWorkloadRestore" =?> ("CheckFormatCode", isCI.Value)
+    ==> "DotnetRestore"
     ==> "DotnetBuild"
     ==> "DotnetTest"
     ==> "DotnetPack"
@@ -707,10 +708,10 @@ let initTargets (ctx : Context.FakeExecutionContext) =
     ==> "GitHubRelease"
     ==>! "Publish"
 
-    "DotnetRestore"
+    "DotnetWorkloadRestore"
     =?> ("CheckFormatCode", isCI.Value)
     =?> ("GenerateAssemblyInfo", isPublishToGitHub)
-    ==> "DotnetWorkloadRestore"
+    ==> "DotnetRestore"
     ==> "DotnetBuild"
     ==> "DotnetTest"
     ==> "DotnetPack"
