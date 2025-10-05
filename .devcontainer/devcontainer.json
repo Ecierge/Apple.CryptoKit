@@ -64,7 +64,8 @@
         "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
     },
     "onCreateCommand": {
-        "enable-starship": "echo 'eval \"$(starship init zsh)\"' >> ~/.zshrc"
+        "enable-starship": "echo 'eval \"$(starship init zsh)\"' >> ~/.zshrc",
+        "install-workloads": "dotnet workload install ios maccatalyst"
     },
     "postAttachCommand": {
         "restore": "dotnet tool restore && dotnet restore"

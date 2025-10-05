@@ -11,7 +11,16 @@ ENV \
     DOTNET_CLI_TELEMETRY_OPTOUT=false\
     DOTNET_USE_POLLING_FILE_WATCHER=true
 
-
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+# Install additional packages needed for .NET workloads
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends \
+        # Required for .NET workloads and native bindings
+        libc6-dev \
+        libgcc-s1 \
+        libgssapi-krb5-2 \
+        libicu72 \
+        libssl3 \
+        libstdc++6 \
+        zlib1g \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
