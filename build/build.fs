@@ -278,6 +278,14 @@ let dotnetToolRestore _ =
     if not result.OK then
         failwithf "Failed to restore .NET tools: %A" result.Errors
 
+let dotnetWorkloadRestore _ =
+    let result =
+        fun () -> DotNet.exec id "workload" "restore"
+        |> (retryIfInCI 10)
+
+    if not result.OK then
+        failwithf "Failed to restore .NET workloads: %A" result.Errors
+
 let updateChangelog ctx =
     latestEntry <-
         if not <| isPublishToGitHub ctx then
@@ -626,6 +634,7 @@ let initTargets (ctx : Context.FakeExecutionContext) =
     Target.create "Clean" clean
     Target.create "DotnetRestore" dotnetRestore
     Target.create "DotnetToolRestore" dotnetToolRestore
+    Target.create "DotnetWorkloadRestore" dotnetWorkloadRestore
     Target.create "UpdateChangelog" updateChangelog
     Target.createBuildFailure "RevertChangelog" revertChangelog // Do NOT put this in the dependency chain
     Target.createFinal "DeleteChangelogBackupFile" deleteChangelogBackupFile // Do NOT put this in the dependency chain
@@ -678,7 +687,6 @@ let initTargets (ctx : Context.FakeExecutionContext) =
 
     "DotnetBuild" ==>! "BuildDocs"
 
-
     "DotnetBuild" ==>! "WatchDocs"
 
     "DotnetTest" ==> "GenerateCoverageReport"
@@ -689,8 +697,10 @@ let initTargets (ctx : Context.FakeExecutionContext) =
     ==> "GitRelease"
     ==>! "Release"
 
+    "DotnetWorkloadRestore" ==>! "DotnetRestore"
 
-    "DotnetRestore" =?> ("CheckFormatCode", isCI.Value)
+    "DotnetWorkloadRestore" =?> ("CheckFormatCode", isCI.Value)
+    ==> "DotnetRestore"
     ==> "DotnetBuild"
     ==> "DotnetTest"
     ==> "DotnetPack"
@@ -698,9 +708,10 @@ let initTargets (ctx : Context.FakeExecutionContext) =
     ==> "GitHubRelease"
     ==>! "Publish"
 
-    "DotnetRestore"
+    "DotnetWorkloadRestore"
     =?> ("CheckFormatCode", isCI.Value)
     =?> ("GenerateAssemblyInfo", isPublishToGitHub)
+    ==> "DotnetRestore"
     ==> "DotnetBuild"
     ==> "DotnetTest"
     ==> "DotnetPack"
