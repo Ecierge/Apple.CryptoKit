@@ -10,7 +10,7 @@ See https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-director
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>logo.png</PackageIcon>
+    <!--<PackageIcon>logo.png</PackageIcon>-->
     <!--https://docs.microsoft.com/en-gb/nuget/reference/msbuild-targets#packagereadmefile -->
     <RepositoryType>git</RepositoryType>
     <Authors>XperiAndri, alekseybailo, DrBrown777</Authors>
