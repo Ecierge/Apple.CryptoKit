@@ -38,6 +38,10 @@
     </NativeReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" />
+  </ItemGroup>
+
   <!-- <ItemGroup>
     <NativeReference Include="NativeLib/KeychainStorage.xcframework">
       <Kind>Framework</Kind>
