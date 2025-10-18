@@ -8,10 +8,6 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net9.0-ios' or '$(TargetFramework)'=='net9.0-maccatalyst'">
-    <Compile Include="ApiDefinition.cs" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
     <Compile Remove="ApiDefinition.cs" />
   </ItemGroup>

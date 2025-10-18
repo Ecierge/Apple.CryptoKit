@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup Label="Microsoft">
-    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="6.30.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
     <PackageVersion Include="MSBuild.StructuredLogger" Version="2.3.59" />
     <PackageVersion Include="MSTest.TestAdapter" Version="4.0.0" />
     <PackageVersion Include="MSTest.TestFramework" Version="4.0.0" />
