@@ -9,17 +9,17 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
 [BaseType(typeof(NSObject))]
-internal interface ACKeychainStorage
+interface ACKeychainStorage // БЕЗ internal!
 {
     [Static]
     [Export("isKeyExist:isPublic:")]
-    internal bool IsKeyExist(string keyName, bool isPublic);
+    bool IsKeyExist(string keyName, bool isPublic);
 
     [Static]
     [Export("getKey:isPublic:")]
-    internal NSData GetKey(string keyName, bool isPublic);
+    NSData GetKey(string keyName, bool isPublic);
 
     [Static]
     [Export("createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:")]
-    internal NSData CreateKey(string keyName, string algorithm, int keySize, bool isPublic, bool keyUsages, bool overwrite);
+    NSData CreateKey(string keyName, string algorithm, int keySize, bool isPublic, bool keyUsages, bool overwrite);
 }

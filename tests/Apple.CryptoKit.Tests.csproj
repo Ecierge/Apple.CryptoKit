@@ -6,14 +6,25 @@
     <Nullable>enable</Nullable>
     <EnableMSTestRunner>true</EnableMSTestRunner>
     <OutputType>Exe</OutputType>
+    
+    <!-- Отключим AOT компиляцию для тестов -->
+    <UseInterpreter>true</UseInterpreter>
+    <MtouchInterpreter>all</MtouchInterpreter>
+    
+    <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+    <ApplicationId>com.yourcompany.Apple.CryptoKit.Tests</ApplicationId>
+    <ApplicationTitle>AppleCryptoKitTests</ApplicationTitle>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <GenerateApplicationManifest>true</GenerateApplicationManifest>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='net9.0'">
-    <Compile Remove="ApiDefinition.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../src/Apple.CryptoKit.csproj" />
   </ItemGroup>
 
 </Project>
