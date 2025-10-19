@@ -3,69 +3,95 @@ namespace Apple.CryptoKit;
 using Foundation;
 using Security;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 
 
 [TestClass]
-public class CngTests
+public class CngKeyTests
 {
-    private const string TestKeyName = "TestRSAKey";
+    private const string CngKeyTestCategory = "CngKey";
+
+    public TestContext TestContext { get; set; }
+
+    private string GetKeyName()
+    {
+        var name = TestContext.TestName + "_" + Guid.NewGuid().ToString();
+        TestContext.Properties["KeyName"] = name;
+        return name;
+    }
 
     [TestMethod]
-    [TestCategory("Cng")]
-    public void CreateRsaKey_ShouldReturnValidKey()
+    [TestCategory(CngKeyTestCategory)]
+    [DataRow(CngKeyUsages.Signing)]
+    [DataRow(CngKeyUsages.Decryption)]
+    public void CreateRsaKey_ShouldReturnValidKey(CngKeyUsages usage)
     {
         // Arrange & Act
-        var key = Cng.Create(TestKeyName, CngKeyUsages.Signing, null);
+        var testKeyName = GetKeyName();
+        var key = CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
+        _createdKeys.Add(testKeyName);
+        var rsaSecurityKey = new RsaSecurityKey(key);
 
         // Assert
         Assert.IsNotNull(key);
-        Assert.IsNotNull(key.Rsa);
+        Assert.IsNotNull(rsaSecurityKey.Rsa);
         Assert.IsTrue(key.KeySize >= 2048);
     }
 
     [TestMethod]
-    [TestCategory("Cng")]
-    public void OpenPrivateKey_ShouldReturnValidKey()
+    [TestCategory(CngKeyTestCategory)]
+    [DataRow(CngKeyUsages.Signing)]
+    [DataRow(CngKeyUsages.Decryption)]
+    public void OpenPrivateKey_ShouldReturnValidKey(CngKeyUsages usage)
     {
         // Arrange
+        var testKeyName = GetKeyName();
         // Ensure key exists
-        Cng.Create(TestKeyName, CngKeyUsages.Signing, null);
+        CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
+        _createdKeys.Add(testKeyName);
 
         // Act
-        var key = Cng.Open(TestKeyName, false);
+        var key = CngKey.Open(testKeyName, usage);
+        var rsaSecurityKey = new RsaSecurityKey(key);
 
         // Assert
         Assert.IsNotNull(key);
-        Assert.IsNotNull(key.Rsa);
+        Assert.IsNotNull(rsaSecurityKey.Rsa);
         Assert.IsTrue(key.KeySize >= 2048);
     }
 
     [TestMethod]
-    [TestCategory("Cng")]
-    public void KeyExists_ShouldReturnTrueForExistingKey()
+    [TestCategory(CngKeyTestCategory)]
+    [DataRow(CngKeyUsages.Signing)]
+    [DataRow(CngKeyUsages.Decryption)]
+    public void KeyExists_ShouldReturnTrueForExistingKey(CngKeyUsages usage)
     {
         // Arrange
-        Cng.Create(TestKeyName, CngKeyUsages.Signing, null);
+        var testKeyName = GetKeyName();
+        CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
+        _createdKeys.Add(testKeyName);
 
         // Act
-        var exists = Cng.Exists(TestKeyName, false);
+        var exists = CngKey.Exists(testKeyName, usage);
 
         // Assert
         Assert.IsTrue(exists);
     }
 
     [TestMethod]
-    [TestCategory("Cng")]
-    public void KeyExists_ShouldReturnFalseForNonExistingKey()
+    [TestCategory(CngKeyTestCategory)]
+    [DataRow(CngKeyUsages.Signing)]
+    [DataRow(CngKeyUsages.Decryption)]
+    public void KeyExists_ShouldReturnFalseForNonExistingKey(CngKeyUsages usage)
     {
         // Arrange
-        var nonExistingKey = "NonExistingKey123";
+        var nonExistingKey = GetKeyName() + "_NonExisting";
 
         // Act
-        var exists = Cng.Exists(nonExistingKey, false);
+        var exists = CngKey.Exists(nonExistingKey, usage);
 
         // Assert
         Assert.IsFalse(exists);
@@ -76,12 +102,10 @@ public class CngTests
     {
         try
         {
-            // Clean up test keys
-            if (Cng.Exists(TestKeyName, false))
-            {
-                // Note: Delete method is not implemented yet
-                // Cng.Delete(TestKeyName, false);
-            }
+            var keyName = (string)TestContext.Properties["KeyName"]!;
+            CngKey.Delete(keyName, CngKeyUsages.Signing);
+            CngKey.Delete(keyName, CngKeyUsages.Decryption);
+
         }
         catch
         {

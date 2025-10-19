@@ -6,32 +6,20 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
+using Apple.CryptoKit.Interop;
 
-public static class Cng
+public static class CngKey
 {
-    public static RsaSecurityKey Create(string name, CngKeyUsages usages, CngProvider? provider)
+    private static bool IsPublicKey(CngKeyUsages usages)
+     => usages switch
+        {
+            CngKeyUsages.Decryption => true,
+            CngKeyUsages.Signing => false,
+            _ => throw new ArgumentOutOfRangeException(nameof(usages), "Unsupported key usage.")
+        };
+
+    static RSA FromNSData(bool isPublic, NSData raw)
     {
-        NSData rawKeyData = ACKeychainStorage.IsKeyExist(name, false)
-            ? ACKeychainStorage.GetKey(name, false)
-            : ACKeychainStorage.CreateKey(name, "rsa", 2048, false, !(usages == CngKeyUsages.Signing), true);
-
-        var keyData = new byte[(int)rawKeyData.Length];
-        Marshal.Copy(rawKeyData.Bytes, keyData, 0, keyData.Length);
-
-        RSA rsa = RSA.Create();
-        rsa.ImportRSAPrivateKey(keyData, out _);
-        return new RsaSecurityKey(rsa);
-    }
-
-    public static RsaSecurityKey Open(string name, bool isPublic)
-    {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException(nameof(name));
-
-        if (!ACKeychainStorage.IsKeyExist(name, isPublic))
-            throw new InvalidOperationException($"Key '{name}' ({(isPublic ? "public" : "private")}) not found.");
-
-        NSData raw = ACKeychainStorage.GetKey(name, isPublic);
         var bytes = new byte[(int)raw.Length];
         Marshal.Copy(raw.Bytes, bytes, 0, bytes.Length);
 
@@ -54,7 +42,7 @@ public static class Cng
             }
         }
 
-        return new RsaSecurityKey(rsa);
+        return rsa;
 
         static bool TryImport(Action import)
         {
@@ -63,15 +51,48 @@ public static class Cng
         }
     }
 
-    public static bool Exists(string name, bool isPublic)
+
+    public static RSA Create(CngAlgorithm algorithm, string name, CngKeyUsages usage, CngProvider? provider)
+    {
+        if (algorithm != CngAlgorithm.Rsa)
+            throw new NotSupportedException($"Algorithm '{algorithm.Algorithm}' is not supported. Only RSA is supported.");
+
+        bool isPublic = IsPublicKey(usage);
+        string algorithmName = algorithm.Algorithm.ToLower();
+        NSData rawKeyData = ACKeychainStorage.CreateKey(name, algorithmName, 2048, false, isPublic, true);
+        return FromNSData(isPublic, rawKeyData);
+    }
+
+    public static RSA Open(string name, CngKeyUsages usage)
     {
         if (string.IsNullOrEmpty(name))
             throw new ArgumentNullException(nameof(name));
 
+        bool isPublic = IsPublicKey(usage);
+
+        NSData raw;
+        try
+        {
+            raw = ACKeychainStorage.GetKey(name, isPublic);
+        }
+        // TODO: Refine exception handling based on ACKeychainStorage implementation
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Key '{name}' for ({usage}) not found.", ex);
+        }
+        return FromNSData(isPublic, raw);
+    }
+
+    public static bool Exists(string name, CngKeyUsages usage)
+    {
+        if (string.IsNullOrEmpty(name))
+            throw new ArgumentNullException(nameof(name));
+
+        bool isPublic = IsPublicKey(usage);
         return ACKeychainStorage.IsKeyExist(name, isPublic);
     }
 
-    public static void Delete(string name, bool isPublic)
+    public static void Delete(string name, CngKeyUsages usage)
     {
         throw new NotImplementedException("Delete functionality not available in current ACKeychainStorage implementation");
     }
