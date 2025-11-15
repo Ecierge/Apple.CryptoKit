@@ -1,6 +1,7 @@
 namespace Apple.CryptoKit.Interop;
 
 using Foundation;
+using ObjCRuntime;
 using Security;
 using System;
 using System.Diagnostics.Contracts;

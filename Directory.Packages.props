@@ -2,13 +2,13 @@
   <ItemGroup Label="Microsoft">
     <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
     <PackageVersion Include="MSBuild.StructuredLogger" Version="2.3.59" />
-    <PackageVersion Include="MSTest.TestAdapter" Version="4.0.0" />
-    <PackageVersion Include="MSTest.TestFramework" Version="4.0.0" />
-    <PackageVersion Include="System.Drawing.Common" Version="9.0.9" />
-    <PackageVersion Include="System.Formats.Asn1" Version="9.0.9" />
+    <PackageVersion Include="System.Drawing.Common" Version="9.0.11" />
+    <PackageVersion Include="System.Formats.Asn1" Version="9.0.11" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup Label="Build and Test">
+    <PackageVersion Include="DeviceRunners.VisualRunners.MSTest" Version="1.0.71" />
+    <PackageVersion Include="DeviceRunners.XHarness.MSTest" Version="1.0.71" />
     <PackageVersion Include="FSharp.Core" Version="9.0.100" />
     <PackageVersion Include="Argu" Version="6.2.5" />
     <PackageVersion Include="Fake.Api.GitHub" Version="6.1.3" />
@@ -22,9 +22,7 @@
     <PackageVersion Include="Fake.DotNet.Paket" Version="6.1.3" />
     <PackageVersion Include="Fake.IO.FileSystem" Version="6.1.3" />
     <PackageVersion Include="Fake.Tools.Git" Version="6.1.3" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="MSTest" Version="3.11.0" />
     <PackageVersion Include="NuGet.Common" Version="6.14.0" />
     <PackageVersion Include="NuGet.Protocol" Version="6.14.0" />
     <PackageVersion Include="Octokit" Version="14.0.0" />
