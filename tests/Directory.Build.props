@@ -6,9 +6,6 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MSTest" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-  </ItemGroup>
+  <!-- MSTest.Sdk handles package references automatically via global.json -->
 
 </Project>
