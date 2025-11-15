@@ -32,13 +32,12 @@ public class CngKeyTests
         // Arrange & Act
         var testKeyName = GetKeyName();
         var key = CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
-        _createdKeys.Add(testKeyName);
         var rsaSecurityKey = new RsaSecurityKey(key);
 
         // Assert
         Assert.IsNotNull(key);
         Assert.IsNotNull(rsaSecurityKey.Rsa);
-        Assert.IsTrue(key.KeySize >= 2048);
+        Assert.IsGreaterThanOrEqualTo(key.KeySize, 2048);
     }
 
     [TestMethod]
@@ -51,7 +50,6 @@ public class CngKeyTests
         var testKeyName = GetKeyName();
         // Ensure key exists
         CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
-        _createdKeys.Add(testKeyName);
 
         // Act
         var key = CngKey.Open(testKeyName, usage);
@@ -60,7 +58,7 @@ public class CngKeyTests
         // Assert
         Assert.IsNotNull(key);
         Assert.IsNotNull(rsaSecurityKey.Rsa);
-        Assert.IsTrue(key.KeySize >= 2048);
+        Assert.IsGreaterThanOrEqualTo(key.KeySize, 2048);
     }
 
     [TestMethod]
@@ -72,7 +70,6 @@ public class CngKeyTests
         // Arrange
         var testKeyName = GetKeyName();
         CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
-        _createdKeys.Add(testKeyName);
 
         // Act
         var exists = CngKey.Exists(testKeyName, usage);
@@ -85,6 +82,10 @@ public class CngKeyTests
     [TestCategory(CngKeyTestCategory)]
     [DataRow(CngKeyUsages.Signing)]
     [DataRow(CngKeyUsages.Decryption)]
+    [System.Runtime.Versioning.SupportedOSPlatform("ios12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("maccatalyst12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("macos12.0")]
+    [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     public void KeyExists_ShouldReturnFalseForNonExistingKey(CngKeyUsages usage)
     {
         // Arrange
