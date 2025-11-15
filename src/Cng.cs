@@ -18,6 +18,10 @@ public static class CngKey
             _ => throw new ArgumentOutOfRangeException(nameof(usages), "Unsupported key usage.")
         };
 
+    [System.Runtime.Versioning.SupportedOSPlatform("ios12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("maccatalyst12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("macos12.0")]
+    [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     static RSA FromNSData(bool isPublic, NSData raw)
     {
         var bytes = new byte[(int)raw.Length];
@@ -52,6 +56,10 @@ public static class CngKey
     }
 
 
+    [System.Runtime.Versioning.SupportedOSPlatform("ios12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("maccatalyst12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("macos12.0")]
+    [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     public static RSA Create(CngAlgorithm algorithm, string name, CngKeyUsages usage, CngProvider? provider)
     {
         if (algorithm != CngAlgorithm.Rsa)
@@ -63,6 +71,10 @@ public static class CngKey
         return FromNSData(isPublic, rawKeyData);
     }
 
+    [System.Runtime.Versioning.SupportedOSPlatform("ios12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("maccatalyst12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("macos12.0")]
+    [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     public static RSA Open(string name, CngKeyUsages usage)
     {
         if (string.IsNullOrEmpty(name))
@@ -83,6 +95,10 @@ public static class CngKey
         return FromNSData(isPublic, raw);
     }
 
+    [System.Runtime.Versioning.SupportedOSPlatform("ios12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("maccatalyst12.2")]
+    [System.Runtime.Versioning.SupportedOSPlatform("macos12.0")]
+    [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     public static bool Exists(string name, CngKeyUsages usage)
     {
         if (string.IsNullOrEmpty(name))

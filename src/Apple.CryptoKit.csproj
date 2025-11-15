@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" />
+    <!-- <PackageReference Include="System.Formats.Asn1" /> -->
   </ItemGroup>
 
   <!-- <ItemGroup>
