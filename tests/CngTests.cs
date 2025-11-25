@@ -3,14 +3,15 @@ namespace Apple.CryptoKit;
 using Foundation;
 using Security;
 using System;
+using Xunit;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 
 
-[TestFixture]
-public class CngKeyTests
+//[TestFixture]
+public class CngKeyTests : IDisposable
 {
     private const string CngKeyTestCategory = "CngKey";
 
@@ -18,14 +19,14 @@ public class CngKeyTests
 
     private string GetKeyName()
     {
-        _keyName = TestContext.CurrentContext.Test.Name + "_" + Guid.NewGuid().ToString();
+        _keyName = "CngKey_" + Guid.NewGuid().ToString();
         return _keyName;
     }
 
-    [Test]
-    [Category(CngKeyTestCategory)]
-    [TestCase(CngKeyUsages.Signing)]
-    [TestCase(CngKeyUsages.Decryption)]
+    [Theory]
+    [Trait("Category", CngKeyTestCategory)]
+    [InlineData(CngKeyUsages.Signing)]
+    [InlineData(CngKeyUsages.Decryption)]
     public void CreateRsaKey_ShouldReturnValidKey(CngKeyUsages usage)
     {
         // Arrange & Act
@@ -34,15 +35,15 @@ public class CngKeyTests
         var rsaSecurityKey = new RsaSecurityKey(key);
 
         // Assert
-        Assert.That(key, Is.Not.Null);
-        Assert.That(rsaSecurityKey.Rsa, Is.Not.Null);
-        Assert.That(key.KeySize, Is.GreaterThanOrEqualTo(2048));
+        Assert.NotNull(key);
+        Assert.NotNull(rsaSecurityKey.Rsa);
+        Assert.True(key.KeySize >= 2048);
     }
 
-    [Test]
-    [Category(CngKeyTestCategory)]
-    [TestCase(CngKeyUsages.Signing)]
-    [TestCase(CngKeyUsages.Decryption)]
+    [Theory]
+    [Trait("Category", CngKeyTestCategory)]
+    [InlineData(CngKeyUsages.Signing)]
+    [InlineData(CngKeyUsages.Decryption)]
     public void OpenPrivateKey_ShouldReturnValidKey(CngKeyUsages usage)
     {
         // Arrange
@@ -55,15 +56,15 @@ public class CngKeyTests
         var rsaSecurityKey = new RsaSecurityKey(key);
 
         // Assert
-        Assert.That(key, Is.Not.Null);
-        Assert.That(rsaSecurityKey.Rsa, Is.Not.Null);
-        Assert.That(key.KeySize, Is.GreaterThanOrEqualTo(2048));
+        Assert.NotNull(key);
+        Assert.NotNull(rsaSecurityKey.Rsa);
+        Assert.True(key.KeySize >= 2048);
     }
 
-    [Test]
-    [Category(CngKeyTestCategory)]
-    [TestCase(CngKeyUsages.Signing)]
-    [TestCase(CngKeyUsages.Decryption)]
+    [Theory]
+    [Trait("Category", CngKeyTestCategory)]
+    [InlineData(CngKeyUsages.Signing)]
+    [InlineData(CngKeyUsages.Decryption)]
     public void KeyExists_ShouldReturnTrueForExistingKey(CngKeyUsages usage)
     {
         // Arrange
@@ -74,13 +75,13 @@ public class CngKeyTests
         var exists = CngKey.Exists(testKeyName, usage);
 
         // Assert
-        Assert.That(exists, Is.True);
+        Assert.True(exists);
     }
 
-    [Test]
-    [Category(CngKeyTestCategory)]
-    [TestCase(CngKeyUsages.Signing)]
-    [TestCase(CngKeyUsages.Decryption)]
+    [Theory]
+    [Trait("Category", CngKeyTestCategory)]
+    [InlineData(CngKeyUsages.Signing)]
+    [InlineData(CngKeyUsages.Decryption)]
     [System.Runtime.Versioning.SupportedOSPlatform("ios12.2")]
     [System.Runtime.Versioning.SupportedOSPlatform("maccatalyst12.2")]
     [System.Runtime.Versioning.SupportedOSPlatform("macos12.0")]
@@ -94,11 +95,11 @@ public class CngKeyTests
         var exists = CngKey.Exists(nonExistingKey, usage);
 
         // Assert
-        Assert.That(exists, Is.False);
+        Assert.False(exists);
     }
 
-    [TearDown]
-    public void Cleanup()
+    //[TearDown]
+    public void Dispose()
     {
         try
         {
