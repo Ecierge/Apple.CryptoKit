@@ -42,4 +42,13 @@
     <ProjectReference Include="../src/Apple.CryptoKit.csproj" />
   </ItemGroup>
 
+  <!-- Clean stray log files from app bundle root before codesign -->
+  <Target Name="CleanAppBundleRoot" BeforeTargets="Build">
+    <ItemGroup>
+      <!-- Delete any .log files in the app bundle root across architectures -->
+      <FilesToDelete Include="$(OutputPath)**/Apple.CryptoKit.Tests.app/*.log" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" ContinueOnError="true" />
+  </Target>
+
 </Project>

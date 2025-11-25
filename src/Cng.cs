@@ -13,8 +13,9 @@ public static class CngKey
     private static bool IsPublicKey(CngKeyUsages usages)
      => usages switch
         {
-            CngKeyUsages.Decryption => true,
-            CngKeyUsages.Signing => false,
+            CngKeyUsages.Encryption => true,   // Encryption uses public keys
+            CngKeyUsages.Decryption => false,  // Decryption requires private key
+            CngKeyUsages.Signing => false,     // Signing requires private key
             _ => throw new ArgumentOutOfRangeException(nameof(usages), "Unsupported key usage.")
         };
 
@@ -24,6 +25,11 @@ public static class CngKey
     [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     static RSA FromNSData(bool isPublic, NSData raw)
     {
+        if (raw == null || raw.Length == 0)
+        {
+            Console.WriteLine("FromNSData: raw data is null or empty");
+            throw new ArgumentNullException(nameof(raw));
+        }
         var bytes = new byte[(int)raw.Length];
         Marshal.Copy(raw.Bytes, bytes, 0, bytes.Length);
 
@@ -64,7 +70,7 @@ public static class CngKey
     {
         if (algorithm != CngAlgorithm.Rsa)
             throw new NotSupportedException($"Algorithm '{algorithm.Algorithm}' is not supported. Only RSA is supported.");
-
+        Console.WriteLine($"Creating key '{name}' with usage '{usage}' and algorithm '{algorithm.Algorithm}'");
         bool isPublic = IsPublicKey(usage);
         string algorithmName = algorithm.Algorithm.ToLower();
         NSData rawKeyData = ACKeychainStorage.CreateKey(name, algorithmName, 2048, false, isPublic, true);
