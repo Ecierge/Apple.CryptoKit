@@ -23,20 +23,22 @@ public class ACKeychainStorage : NSObject {
         return false;
     }
     
-    @objc(getKey:isPublic:)
-    public static func getKey(tag: String, isPublic: Bool) -> Data {
+    @objc(getKey:isPublic:error:)
+    public static func getKey(tag: String, isPublic: Bool) throws -> Data {
 
         //Searching existing key
         let existingKey = findKey(keyName: tag, isPublic: isPublic)
         if existingKey != nil {
-            return exportKey(secKey:existingKey!, isPublic:isPublic)
+            return try exportKey(secKey:existingKey!, isPublic:isPublic)
         }
         
-        return Data()
+        throw NSError(domain: NSOSStatusErrorDomain, code: Int(errSecItemNotFound), userInfo: [
+            NSLocalizedDescriptionKey: "Key '\(tag)' not found in keychain"
+        ])
     }
     
-    @objc(createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:)
-    public static func createRSAKeyAnsStoreInkeychain(tag: String, algorithm: String, keySize: Int, isPublic: Bool, keyUsage: Bool, overwrite: Bool) -> Data {
+    @objc(createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:error:)
+    public static func createRSAKeyAnsStoreInkeychain(tag: String, algorithm: String, keySize: Int, isPublic: Bool, keyUsage: Bool, overwrite: Bool) throws -> Data {
 
         let tagData = tag.data(using: .utf8)!
         var keyType = kSecAttrKeyTypeRSA;
@@ -52,8 +54,9 @@ public class ACKeychainStorage : NSObject {
 //            print("DSA algorithm selected")
         default:
             print("Unknown algorithm")
-            return Data()
-            //throw KeychainError.customError("Unknown algorithm")
+            throw NSError(domain: NSOSStatusErrorDomain, code: Int(errSecUnimplemented), userInfo: [
+                NSLocalizedDescriptionKey: "Unknown algorithm: \(algorithm)"
+            ])
         }
         
         if (overwrite)
@@ -69,7 +72,7 @@ public class ACKeychainStorage : NSObject {
         //Searching existing key
         let existingKey = findKey(keyName: tag, isPublic: isPublic)
         if existingKey != nil {
-            return exportKey(secKey:existingKey!, isPublic:isPublic)
+            return try exportKey(secKey:existingKey!, isPublic:isPublic)
         }
         
         //Key not found, let's try create and store new one
@@ -79,6 +82,7 @@ public class ACKeychainStorage : NSObject {
             kSecAttrLabel as String: tag,                   // Label for the key
             kSecAttrApplicationTag as String: tagData,      // Custom tag for identifying the key
             kSecAttrIsPermanent as String: true,            // Store the key permanently in the Keychain
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,  // Required for Mac Catalyst
         ]
 
         if !isPublic {
@@ -99,11 +103,13 @@ public class ACKeychainStorage : NSObject {
         //Finally generate the key
         var error: Unmanaged<CFError>?
         guard let newKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
-            print("Error generating key: \(error!.takeRetainedValue())")
-            return Data()
+            let cfError = error!.takeRetainedValue() as Error
+            let nsError = cfError as NSError
+            print("Error generating key: \(nsError)")
+            throw nsError
         }
         
-        return exportKey(secKey:newKey, isPublic:isPublic)
+        return try exportKey(secKey:newKey, isPublic:isPublic)
     }
 
     //
@@ -130,11 +136,15 @@ public class ACKeychainStorage : NSObject {
         return nil;
     }
 
-    static func exportKey(secKey: SecKey, isPublic: Bool) -> Data {
+    static func exportKey(secKey: SecKey, isPublic: Bool) throws -> Data {
         // Export the key
         var error: Unmanaged<CFError>?
         if isPublic {
-            guard let publicKey = SecKeyCopyPublicKey(secKey) else { return Data() }
+            guard let publicKey = SecKeyCopyPublicKey(secKey) else {
+                throw NSError(domain: NSOSStatusErrorDomain, code: Int(errSecParam), userInfo: [
+                    NSLocalizedDescriptionKey: "Failed to get public key from SecKey"
+                ])
+            }
             if let publicKeyData = SecKeyCopyExternalRepresentation(publicKey, &error) {
                 return publicKeyData as Data
             }
@@ -144,7 +154,14 @@ public class ACKeychainStorage : NSObject {
             }
         }
 
-        print("Error exporting key: \(String(describing: error))")
-        return Data()
+        if let cfError = error {
+            let nsError = cfError.takeRetainedValue() as Error as NSError
+            print("Error exporting key: \(nsError)")
+            throw nsError
+        }
+        
+        throw NSError(domain: NSOSStatusErrorDomain, code: Int(errSecParam), userInfo: [
+            NSLocalizedDescriptionKey: "Failed to export key"
+        ])
     }
 }

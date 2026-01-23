@@ -88,16 +88,17 @@
               }
             ],
             "declKind": "Func",
-            "usr": "c:@M@KeychainStorage@objc(cs)ACKeychainStorage(cm)getKey:isPublic:",
-            "mangledName": "$s15KeychainStorage010ACKeychainB0C6getKey3tag8isPublic10Foundation4DataVSS_SbtFZ",
+            "usr": "c:@M@KeychainStorage@objc(cs)ACKeychainStorage(cm)getKey:isPublic:error:",
+            "mangledName": "$s15KeychainStorage010ACKeychainB0C6getKey3tag8isPublic10Foundation4DataVSS_SbtKFZ",
             "moduleName": "KeychainStorage",
             "static": true,
-            "objc_name": "getKey:isPublic:",
+            "objc_name": "getKey:isPublic:error:",
             "declAttributes": [
               "Final",
               "AccessControl",
               "ObjC"
             ],
+            "throwing": true,
             "funcSelfKind": "NonMutating"
           },
           {
@@ -149,16 +150,17 @@
               }
             ],
             "declKind": "Func",
-            "usr": "c:@M@KeychainStorage@objc(cs)ACKeychainStorage(cm)createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:",
-            "mangledName": "$s15KeychainStorage010ACKeychainB0C30createRSAKeyAnsStoreInkeychain3tag9algorithm7keySize8isPublic0K5Usage9overwrite10Foundation4DataVSS_SSSiS3btFZ",
+            "usr": "c:@M@KeychainStorage@objc(cs)ACKeychainStorage(cm)createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:error:",
+            "mangledName": "$s15KeychainStorage010ACKeychainB0C30createRSAKeyAnsStoreInkeychain3tag9algorithm7keySize8isPublic0K5Usage9overwrite10Foundation4DataVSS_SSSiS3btKFZ",
             "moduleName": "KeychainStorage",
             "static": true,
-            "objc_name": "createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:",
+            "objc_name": "createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:error:",
             "declAttributes": [
               "Final",
               "AccessControl",
               "ObjC"
             ],
+            "throwing": true,
             "funcSelfKind": "NonMutating"
           },
           {
