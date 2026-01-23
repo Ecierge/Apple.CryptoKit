@@ -17,10 +17,10 @@ public interface ACKeychainStorage
     public bool IsKeyExist(string keyName, bool isPublic);
 
     [Static]
-    [Export("getKey:isPublic:")]
-    public NSData GetKey(string keyName, bool isPublic);
+    [Export("getKey:isPublic:error:")]
+    public NSData GetKey(string keyName, bool isPublic, out NSError error);
 
     [Static]
-    [Export("createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:")]
-    public NSData CreateKey(string keyName, string algorithm, int keySize, bool isPublic, bool keyUsages, bool overwrite);
+    [Export("createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:error:")]
+    public NSData CreateKey(string keyName, string algorithm, int keySize, bool isPublic, bool keyUsages, bool overwrite, out NSError error);
 }
