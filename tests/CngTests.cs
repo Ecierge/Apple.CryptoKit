@@ -42,15 +42,15 @@ public class CngKeyTests : IDisposable
     [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     public void CreateRsaKey_ShouldReturnValidKey(CngKeyUsages usage)
     {
-        if (IsMacCatalyst())
-        {
+        //if (IsMacCatalyst())
+        //{
             // Skip: SecKeyCopyExternalRepresentation not supported on MacCatalyst
-            return;
-        }
+            //return;
+        //}
 
         // Arrange & Act
         var testKeyName = GetKeyName();
-        var key = CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
+        RSA key = CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);
         var rsaSecurityKey = new RsaSecurityKey(key);
 
         // Assert
@@ -69,11 +69,11 @@ public class CngKeyTests : IDisposable
     [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     public void OpenPrivateKey_ShouldReturnValidKey(CngKeyUsages usage)
     {
-        if (IsMacCatalyst())
-        {
+        //if (IsMacCatalyst())
+        //{
             // Skip: SecKeyCopyExternalRepresentation not supported on MacCatalyst
-            return;
-        }
+        //    return;
+        //}
 
         // Arrange
         var testKeyName = GetKeyName();
@@ -100,12 +100,12 @@ public class CngKeyTests : IDisposable
     [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     public void KeyExists_ShouldReturnTrueForExistingKey(CngKeyUsages usage)
     {
-        if (IsMacCatalyst())
-        {
-            // Skip: SecKeyCopyExternalRepresentation not supported on MacCatalyst
-            return;
-        }
-
+        //if (IsMacCatalyst())
+        //{
+        //    // Skip: SecKeyCopyExternalRepresentation not supported on MacCatalyst
+        //    return;
+        //}
+        
         // Arrange
         var testKeyName = GetKeyName();
         CngKey.Create(CngAlgorithm.Rsa, testKeyName, usage, null);

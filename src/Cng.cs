@@ -13,7 +13,6 @@ public static class CngKey
     private static bool IsPublicKey(CngKeyUsages usages)
      => usages switch
         {
-            CngKeyUsages.Encryption => true,   // Encryption uses public keys
             CngKeyUsages.Decryption => false,  // Decryption requires private key
             CngKeyUsages.Signing => false,     // Signing requires private key
             _ => throw new ArgumentOutOfRangeException(nameof(usages), "Unsupported key usage.")
@@ -25,11 +24,6 @@ public static class CngKey
     [System.Runtime.Versioning.SupportedOSPlatform("tvos12.2")]
     static RSA FromNSData(bool isPublic, NSData raw)
     {
-        if (raw == null || raw.Length == 0)
-        {
-            Console.WriteLine("FromNSData: raw data is null or empty");
-            throw new ArgumentNullException(nameof(raw));
-        }
         var bytes = new byte[(int)raw.Length];
         Marshal.Copy(raw.Bytes, bytes, 0, bytes.Length);
 
@@ -73,7 +67,15 @@ public static class CngKey
         Console.WriteLine($"Creating key '{name}' with usage '{usage}' and algorithm '{algorithm.Algorithm}'");
         bool isPublic = IsPublicKey(usage);
         string algorithmName = algorithm.Algorithm.ToLower();
-        NSData rawKeyData = ACKeychainStorage.CreateKey(name, algorithmName, 2048, false, isPublic, true);
+        NSData rawKeyData = ACKeychainStorage.CreateKey(name, algorithmName, 2048, false, isPublic, true, out NSError error);
+        if (error is not null)
+        {
+            throw new CryptographicException($"Failed to create key: {error.LocalizedDescription}", new NSErrorException(error));
+        }
+        if (rawKeyData is null || rawKeyData.Length == 0)
+        {
+            throw new CryptographicException($"Failed to create key '{name}': No key data returned");
+        }
         return FromNSData(isPublic, rawKeyData);
     }
 
@@ -88,15 +90,14 @@ public static class CngKey
 
         bool isPublic = IsPublicKey(usage);
 
-        NSData raw;
-        try
+        NSData raw = ACKeychainStorage.GetKey(name, isPublic, out NSError error);
+        if (error is not null)
         {
-            raw = ACKeychainStorage.GetKey(name, isPublic);
+            throw new CryptographicException($"Failed to get key '{name}': {error.LocalizedDescription}", new NSErrorException(error));
         }
-        // TODO: Refine exception handling based on ACKeychainStorage implementation
-        catch (Exception ex)
+        if (raw == null || raw.Length == 0)
         {
-            throw new InvalidOperationException($"Key '{name}' for ({usage}) not found.", ex);
+            throw new CryptographicException($"Failed to open key '{name}': No key data returned");
         }
         return FromNSData(isPublic, raw);
     }
