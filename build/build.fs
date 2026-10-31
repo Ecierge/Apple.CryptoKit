@@ -242,16 +242,25 @@ let allPublishChecks () = failOnLocalBuild ()
 /// So we don't require always being on the latest MSBuild.StructuredLogger
 let disableBinLog (p : MSBuild.CliArguments) = { p with DisableInternalBinLog = true }
 
+/// Empties the directories and creates the missing ones. `Shell.cleanDirs` of FAKE sets the attributes of every file, which
+/// .NET refuses for the symbolic links in the app bundle of Mac Catalyst
+let cleanDirs (directories : string seq) =
+    for directory in directories do
+        if IO.Directory.Exists directory then
+            IO.Directory.Delete (directory, true)
+
+        IO.Directory.CreateDirectory directory |> ignore
+
 let clean _ =
     [ "bin"; "temp"; distDir; coverageReportDir; testResultsDir ]
-    |> Shell.cleanDirs
+    |> cleanDirs
 
     !!srcGlob ++ testsGlob
     |> Seq.collect (fun p ->
         [ "bin"; "obj" ]
         |> Seq.map (fun sp -> IO.Path.GetDirectoryName p </> sp)
     )
-    |> Shell.cleanDirs
+    |> cleanDirs
 
 let dotnetRestore _ =
     [ sln ]
