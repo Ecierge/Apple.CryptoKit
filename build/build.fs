@@ -1,4 +1,5 @@
 open System
+open System.Xml.Linq
 open Fake.Core
 open Fake.DotNet
 open Fake.Tools
@@ -27,6 +28,9 @@ let environVarAsBoolOrDefault varName defaultValue =
 let rootDirectory = __SOURCE_DIRECTORY__ </> ".."
 
 let productName = "Apple.CryptoKit"
+
+/// The assembly information of the release. `src/Directory.Build.props` imports it, so that the SDK generates the attributes.
+let assemblyInfoPropsPath = rootDirectory </> "src" </> "AssemblyInfo.Build.props"
 
 let sln = rootDirectory </> "Apple.CryptoKit.slnf"
 
@@ -175,9 +179,9 @@ module FSharpAnalyzers =
             member s.Usage = ""
 
 
-module DocsTool =
-    let quoted s = $"\"%s{s}\""
+let quoted s = $"\"%s{s}\""
 
+module DocsTool =
     let fsDocsDotnetOptions (o : DotNet.Options) = { o with WorkingDirectory = rootDirectory }
 
     let fsDocsBuildParams configuration (p : Fsdocs.BuildCommandParams) = {
@@ -198,9 +202,7 @@ module DocsTool =
                     "fsdocs-readme-link", quoted (READMElink.ToString ())
                     "fsdocs-release-notes-link", quoted (CHANGELOGlink.ToString ())
                     "fsdocs-logo-src",
-                    quoted (
-                        "https://raw.githubusercontent.com/fsprojects/FSharp.Azure.Cosmos/refs/heads/main/docsSrc/content/logo.png"
-                    )
+                    quoted ("https://raw.githubusercontent.com/Ecierge/Apple.CryptoKit/refs/heads/main/docsSrc/content/logo.png")
                 ]
             Strict = Some true
     }
@@ -269,22 +271,16 @@ let dotnetRestore _ =
     )
     |> Seq.iter (retryIfInCI 10)
 
-let dotnetToolRestore _ =
-    let result =
-        fun () -> DotNet.exec id "tool" "restore"
-        |> (retryIfInCI 10)
-
-
-    if not result.OK then
-        failwithf "Failed to restore .NET tools: %A" result.Errors
-
 let dotnetWorkloadRestore _ =
-    let result =
-        fun () -> DotNet.exec id "workload" "restore"
-        |> (retryIfInCI 10)
+    // The root of the repository has more than one solution file, so `dotnet workload restore` cannot pick the one to use
+    // and the workloads are restored for each project instead
+    srcAndTest
+    |> Seq.iter (fun project ->
+        let result = retryIfInCI 10 (fun () -> DotNet.exec id "workload" $"restore \"%s{project}\"")
 
-    if not result.OK then
-        failwithf "Failed to restore .NET workloads: %A" result.Errors
+        if not result.OK then
+            failwithf "Failed to restore .NET workloads for %s: %A" project result.Errors
+    )
 
 let updateChangelog ctx =
     latestEntry <-
@@ -346,7 +342,7 @@ let dotnetBuild ctx =
         sln
 
 let fsharpAnalyzers _ =
-    let argParser = ArgumentParser.Create<FSharpAnalyzers.Arguments> (programName = "fsharp-analyzers")
+    let argParser = ArgumentParser.Create<FSharpAnalyzers.Arguments>(programName = "fsharp-analyzers")
 
     !!srcGlob
     |> Seq.iter (fun proj ->
@@ -440,44 +436,91 @@ let watchTests _ =
 
     cancelEvent.Cancel <- true
 
+/// Writes the assembly information of the latest changelog entry in two places. `src/AssemblyInfo.Build.props` holds
+/// the properties and the `AssemblyMetadata` items from which the SDK generates the assembly attributes, and
+/// `src/Directory.Build.props` imports it, so a project sets only what is specific to it in its own project file.
+/// `AssemblyInfo.fs` of each F# project in `src` holds the literals of `AssemblyVersionInformation` in the namespace of
+/// the project, which the code can use at compile time. It has no attributes, because the SDK generates them.
 let generateAssemblyInfo _ =
-
-    let (|Fsproj|Csproj|Vbproj|) (projFileName : string) =
-        match projFileName with
-        | f when f.EndsWith ("fsproj") -> Fsproj
-        | f when f.EndsWith ("csproj") -> Csproj
-        | f when f.EndsWith ("vbproj") -> Vbproj
-        | _ -> failwithf "Project file %s not supported. Unknown project type." projFileName
 
     let releaseChannel =
         match latestEntry.SemVer.PreRelease with
         | Some pr -> pr.Name
         | _ -> "release"
 
-    let getAssemblyInfoAttributes projectName = [
-        AssemblyInfo.Title (projectName)
-        AssemblyInfo.Product productName
-        AssemblyInfo.Version latestEntry.AssemblyVersion
-        AssemblyInfo.Metadata ("ReleaseDate", latestEntry.Date.Value.ToString ("o"))
-        AssemblyInfo.FileVersion latestEntry.AssemblyVersion
-        AssemblyInfo.InformationalVersion latestEntry.AssemblyVersion
-        AssemblyInfo.Metadata ("ReleaseChannel", releaseChannel)
-        AssemblyInfo.Metadata ("GitHash", Git.Information.getCurrentSHA1 (null))
+    // The date is optional in a changelog entry
+    let releaseDate = latestEntry.Date |> Option.map _.ToString("o")
+    let gitHash = Git.Information.getCurrentSHA1 (null)
+
+    let metadata = [
+        match releaseDate with
+        | Some date -> "ReleaseDate", date
+        | None -> ()
+        "ReleaseChannel", releaseChannel
+        "GitHash", gitHash
     ]
 
-    let getProjectDetails (projectPath : string) =
-        let projectName = IO.Path.GetFileNameWithoutExtension (projectPath)
+    let properties =
+        XElement (
+            "PropertyGroup",
+            XElement ("Product", productName),
+            XElement ("AssemblyVersion", latestEntry.AssemblyVersion),
+            XElement ("FileVersion", latestEntry.AssemblyVersion),
+            XElement ("InformationalVersion", latestEntry.AssemblyVersion),
+            // The git hash is in the metadata, so the SDK must not append the source revision to the informational version
+            XElement ("IncludeSourceRevisionInInformationalVersion", "false")
+        )
 
-        (projectPath, projectName, IO.Path.GetDirectoryName (projectPath), (getAssemblyInfoAttributes projectName))
+    let items =
+        XElement (
+            "ItemGroup",
+            metadata
+            |> List.map (fun (key, value) ->
+                XElement ("AssemblyMetadata", XAttribute ("Include", key), XAttribute ("Value", value))
+            )
+        )
 
-    !!srcGlob
-    |> Seq.map getProjectDetails
-    |> Seq.iter (fun (projFileName, _, folderName, attributes) ->
-        match projFileName with
-        | Fsproj -> AssemblyInfoFile.createFSharp (folderName </> "AssemblyInfo.fs") attributes
-        | Csproj -> AssemblyInfoFile.createCSharp ((folderName </> "Properties") </> "AssemblyInfo.cs") attributes
-        | Vbproj -> AssemblyInfoFile.createVisualBasic ((folderName </> "My Project") </> "AssemblyInfo.vb") attributes
-    )
+    let props =
+        XDocument (XComment " Auto-Generated by FAKE; do not edit ", XElement ("Project", properties, items))
+
+    // XDocument breaks lines as the operating system does, and the other generated file has "\n" everywhere
+    let propsText = props.ToString().ReplaceLineEndings "\n"
+
+    File.writeString false assemblyInfoPropsPath $"%s{propsText}\n"
+
+    let versionInformation projectName =
+        let literals = [
+            "AssemblyTitle", projectName
+            "AssemblyProduct", productName
+            "AssemblyVersion", latestEntry.AssemblyVersion
+            match releaseDate with
+            | Some date -> "AssemblyMetadata_ReleaseDate", date
+            | None -> ()
+            "AssemblyFileVersion", latestEntry.AssemblyVersion
+            "AssemblyInformationalVersion", latestEntry.AssemblyVersion
+            "AssemblyMetadata_ReleaseChannel", releaseChannel
+            "AssemblyMetadata_GitHash", gitHash
+        ]
+
+        [
+            "// Auto-Generated by FAKE; do not edit"
+            // The name of the project is its root namespace
+            $"namespace %s{projectName}"
+            ""
+            "module internal AssemblyVersionInformation ="
+            yield!
+                literals
+                |> List.map (fun (name, value) -> $"    let [<Literal>] %s{name} = \"%s{value}\"")
+        ]
+        |> String.concat "\n"
+
+    let writeVersionInformation (projectPath : string) =
+        // The project path is not null, so neither is the name
+        let projectName = IO.Path.GetFileNameWithoutExtension projectPath |> nonNull
+        File.writeString false (Path.getDirectory projectPath </> "AssemblyInfo.fs") $"%s{versionInformation projectName}\n"
+
+    !!(rootDirectory </> "src/**/*.fsproj")
+    |> Seq.iter writeVersionInformation
 
 let dotnetPack ctx =
     // Get release notes with properly-linked version number
@@ -539,6 +582,7 @@ let gitRelease _ =
 
     !!(rootDirectory </> "src/**/AssemblyInfo.fs")
     ++ (rootDirectory </> "tests/**/AssemblyInfo.fs")
+    ++ assemblyInfoPropsPath
     |> Seq.iter (Git.Staging.stageFile "" >> ignore)
 
     let msg = $"release: bump version to `%s{latestEntry.NuGetVersion}`\n\n%s{releaseNotesGitCommitFormat}"
@@ -593,7 +637,6 @@ let checkFormatCode ctx =
     else
         Trace.logf "Errors while formatting: %A" result.Errors
 
-
 let cleanDocsCache _ = DocsTool.cleanDocsCache ()
 
 let buildDocs ctx =
@@ -617,10 +660,15 @@ let initTargets (ctx : Context.FakeExecutionContext) =
             && String.Equals (value, "PublishToGitHub", StringComparison.OrdinalIgnoreCase)
         )
 
-    /// Defines a dependency - y is dependent on x. Finishes the chain.
+    /// <summary>
+    /// Defines a dependency - <paramref name="y"/> is dependent on <paramref name="x"/>. Finishes the chain.
+    /// </summary>
     let (==>!) x y = x ==> y |> ignore
 
-    /// Defines a soft dependency. x must run before y, if it is present, but y does not require x to be run. Finishes the chain.
+    /// <summary>
+    /// Defines a soft dependency. <paramref name="x"/> must run before <paramref name="y"/>, if it is present, but
+    /// <paramref name="y"/> does not require <paramref name="x"/> to be run. Finishes the chain.
+    /// </summary>
     let (?=>!) x y = x ?=> y |> ignore
     //-----------------------------------------------------------------------------
     // Hide Secrets in Logger
@@ -633,7 +681,6 @@ let initTargets (ctx : Context.FakeExecutionContext) =
 
     Target.create "Clean" clean
     Target.create "DotnetRestore" dotnetRestore
-    Target.create "DotnetToolRestore" dotnetToolRestore
     Target.create "DotnetWorkloadRestore" dotnetWorkloadRestore
     Target.create "UpdateChangelog" updateChangelog
     Target.createBuildFailure "RevertChangelog" revertChangelog // Do NOT put this in the dependency chain
@@ -687,6 +734,7 @@ let initTargets (ctx : Context.FakeExecutionContext) =
 
     "DotnetBuild" ==>! "BuildDocs"
 
+
     "DotnetBuild" ==>! "WatchDocs"
 
     "DotnetTest" ==> "GenerateCoverageReport"
@@ -696,6 +744,7 @@ let initTargets (ctx : Context.FakeExecutionContext) =
     ==> "GenerateAssemblyInfo"
     ==> "GitRelease"
     ==>! "Release"
+
 
     "DotnetWorkloadRestore" ==>! "DotnetRestore"
 
@@ -718,11 +767,6 @@ let initTargets (ctx : Context.FakeExecutionContext) =
     ==>! "PublishToGitHub"
 
     "DotnetRestore" ==>! "WatchTests"
-
-    //"DotnetToolRestore" ?=>! "DotnetRestore"
-    "DotnetToolRestore" ==>! "BuildDocs"
-    "DotnetToolRestore" ?=>! "CheckFormatCode"
-    "DotnetToolRestore" ?=>! "FormatCode"
 
 //-----------------------------------------------------------------------------
 // Target Start

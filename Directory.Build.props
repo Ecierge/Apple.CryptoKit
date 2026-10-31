@@ -26,10 +26,10 @@ See https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-director
   <PropertyGroup>
     <AssemblyBaseName>Ecierge.$(MSBuildProjectName)</AssemblyBaseName>
     <LangVersion Condition="'$(MSBuildProjectExtension)'=='.csproj'">13.0</LangVersion>
-    <LangVersion Condition="'$(MSBuildProjectExtension)'=='.fsproj'">9.0</LangVersion>
+    <LangVersion Condition="'$(MSBuildProjectExtension)'=='.fsproj'">10.0</LangVersion>
     <Nullable>enable</Nullable>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
 
   <ItemGroup>
