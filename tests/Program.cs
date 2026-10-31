@@ -18,36 +18,11 @@ public class TestsEntryPoint : ApplicationEntryPoint
 
     protected override TestRunner GetTestRunner(LogWriter logWriter)
     {
-        //// Try to explicitly load the NUnit runner assembly
-        //Assembly? nunitAssembly = null;
-
-        //// First check if already loaded
-        //nunitAssembly = AppDomain.CurrentDomain.GetAssemblies()
-        //    .FirstOrDefault(a => a.GetName().Name == "Microsoft.DotNet.XHarness.TestRunners.NUnit");
-
-        //// If not loaded, try to load it explicitly
-        //if (nunitAssembly == null)
-        //{
-        //    try
-        //    {
-        //        nunitAssembly = Assembly.Load("Microsoft.DotNet.XHarness.TestRunners.NUnit");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Failed to load NUnit runner assembly: {ex.Message}");
-        //        Console.WriteLine($"Loaded assemblies: {string.Join(", ", AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name))}");
-        //        throw new InvalidOperationException("Could not find Microsoft.DotNet.XHarness.TestRunners.NUnit assembly", ex);
-        //    }
-        //}
-
-        //var nunitRunnerType = nunitAssembly.GetType("Microsoft.DotNet.XHarness.TestRunners.NUnit.NUnitTestRunner");
-        //if (nunitRunnerType == null)
-        //{
-        //    throw new InvalidOperationException("Could not find NUnitTestRunner type");
-        //}
-
-        //return (TestRunner)Activator.CreateInstance(nunitRunnerType, logWriter)!;
-        return new Microsoft.DotNet.XHarness.TestRunners.NUnit.NUnitTestRunner(logWriter);
+        // XHarness declares NUnitTestRunner internal, so the runner is created by reflection.
+        // IResultSummary is public and lives in the same assembly as the runner.
+        var runnerType = typeof(Microsoft.DotNet.XHarness.TestRunners.NUnit.IResultSummary).Assembly
+            .GetType("Microsoft.DotNet.XHarness.TestRunners.NUnit.NUnitTestRunner", throwOnError: true)!;
+        return (TestRunner)Activator.CreateInstance(runnerType, logWriter)!;
     }
 
     protected override void TerminateWithSuccess()
