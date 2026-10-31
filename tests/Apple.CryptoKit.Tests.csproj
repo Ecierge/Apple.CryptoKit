@@ -39,6 +39,12 @@
        sets ApplicationId, CodesignKey and CodesignProvision for Mac Catalyst (see the README) -->
   <Import Project="Signing.local.props" Condition="Exists('Signing.local.props')" />
 
+  <!-- SKIP_KEYCHAIN_WRITE_TESTS=true skips the theories that write to the Keychain on Mac Catalyst, where an app without a provisioning
+       profile cannot (see KeychainWriteTheoryAttribute). It is a temporary measure of CI. The iOS simulator is not affected -->
+  <PropertyGroup Condition="'$(SKIP_KEYCHAIN_WRITE_TESTS)' == 'true' And $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+    <DefineConstants>$(DefineConstants);SKIP_KEYCHAIN_WRITE_TESTS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="xunit" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Condition="'$(TargetFramework)' == 'net10.0'" />

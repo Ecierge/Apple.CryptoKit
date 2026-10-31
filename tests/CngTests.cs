@@ -32,7 +32,7 @@ public class CngKeyTests : IDisposable
         return _keyName;
     }
 
-    [Theory]
+    [KeychainWriteTheory]
     [Trait("Category", CngKeyTestCategory)]
     [InlineData(CngKeyUsages.Signing)]
     [InlineData(CngKeyUsages.Decryption)]
@@ -59,7 +59,7 @@ public class CngKeyTests : IDisposable
         Assert.True(key.KeySize >= 2048);
     }
 
-    [Theory]
+    [KeychainWriteTheory]
     [Trait("Category", CngKeyTestCategory)]
     [InlineData(CngKeyUsages.Signing)]
     [InlineData(CngKeyUsages.Decryption)]
@@ -90,7 +90,7 @@ public class CngKeyTests : IDisposable
         Assert.True(key.KeySize >= 2048);
     }
 
-    [Theory]
+    [KeychainWriteTheory]
     [Trait("Category", CngKeyTestCategory)]
     [InlineData(CngKeyUsages.Signing)]
     [InlineData(CngKeyUsages.Decryption)]
