@@ -30,6 +30,12 @@
     <GenerateApplicationManifest>true</GenerateApplicationManifest>
   </PropertyGroup>
 
+  <!-- The Keychain accepts the writes of a Mac Catalyst app only when it is signed with a provisioning profile, which supplies the
+       application identifier. The ad-hoc signing above (CodesignKey -) leaves 6 of 8 tests failing with -34018. A development profile
+       lists the devices it works on, so the signing is a setting of the machine: Signing.local.props is not in the repository and
+       sets ApplicationId, CodesignKey and CodesignProvision for Mac Catalyst (see the README) -->
+  <Import Project="Signing.local.props" Condition="Exists('Signing.local.props')" />
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
