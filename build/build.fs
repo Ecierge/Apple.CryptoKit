@@ -94,8 +94,6 @@ let mutable changelogBackupFilename = ""
 
 let publishUrl = "https://www.nuget.org"
 
-let enableCodeCoverage = environVarAsBoolOrDefault "ENABLE_COVERAGE" false
-
 let githubToken = Environment.environVarOrNone "GITHUB_TOKEN"
 
 let nugetToken = Environment.environVarOrNone "NUGET_TOKEN"
@@ -359,27 +357,50 @@ let fsharpAnalyzers _ =
         dotnet.fsharpAnalyzer id args
     )
 
+/// The tests are iOS and Mac Catalyst apps. `dotnet test` cannot run them, because its test host cannot start an app,
+/// so XHarness installs each app on its target, runs it and writes the results into the test results directory.
 let dotnetTest ctx =
-    // Create test results directory if it doesn't exist
-    Directory.create testResultsDir
+    let configuration = string (configuration ctx.Context.AllExecutingTargets)
 
-    let args = [
-        "--no-build"
-        if enableCodeCoverage then
-            "--collect:\"Code Coverage\""
-            "--results-directory"
-            testResultsDir
-        "--logger:trx" // Enable TRX report generation
-    ]
+    // The build puts an app into a folder of its runtime identifier, such as net10.0-ios/iossimulator-arm64
+    let findApp (platform : string) =
+        let directory = rootDirectory </> "tests" </> "bin" </> configuration
 
-    DotNet.test
-        (fun c -> {
-            c with
-                MSBuildParams = disableBinLog c.MSBuildParams
-                Configuration = configuration (ctx.Context.AllExecutingTargets)
-                Common = c.Common |> DotNet.Options.withAdditionalArgs args
-        })
-        sln
+        if IO.Directory.Exists directory then
+            IO.Directory.EnumerateDirectories (directory, "*.app", IO.SearchOption.AllDirectories)
+            |> Seq.tryFind (fun app ->
+                app.Contains ($"-%s{platform}%c{IO.Path.DirectorySeparatorChar}", StringComparison.Ordinal)
+            )
+        else
+            None
+
+    // Mac Catalyst is not run by default: the Keychain refuses the calls of an app that is not signed with a provisioning profile
+    Environment.environVarOrDefault "XHARNESS_TARGETS" "ios-simulator-64"
+    |> String.split ','
+    |> List.map String.trim
+    |> List.iter (fun target ->
+        let platform =
+            if target.StartsWith ("maccatalyst", StringComparison.Ordinal) then
+                "maccatalyst"
+            else
+                "ios"
+
+        let app =
+            findApp platform
+            |> Option.defaultWith (fun () -> failwithf "The %s app is not built, run DotnetBuild first" platform)
+
+        let output = testResultsDir </> target
+        Directory.create output
+
+        let result =
+            DotNet.exec
+                id
+                "xharness"
+                $"apple test --app \"%s{app}\" --target %s{target} --output-directory \"%s{output}\" --timeout 00:10:00 --launch-timeout 00:05:00"
+
+        if not result.OK then
+            failwithf "The tests failed on %s with the XHarness exit code %d, see %s" target result.ExitCode output
+    )
 
 let generateCoverageReport _ =
 

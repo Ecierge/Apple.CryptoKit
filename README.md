@@ -35,10 +35,16 @@ Without a target the script packs the solution. The targets are declared in `bui
 `DotnetTest`, `DotnetPack`, `FormatCode`, `CheckFormatCode`, `BuildDocs` and `Release <version>`. Any build restores the
 local tools in `.config/dotnet-tools.json` first.
 
+`DotnetTest` runs the test apps with [XHarness](https://github.com/dotnet/xharness), because `dotnet test` cannot start an
+app. It installs each app on its target and writes the results into `TestResults/<target>`. By default it runs the iOS
+simulator. Mac Catalyst is opt-in, because its Keychain tests need an app that is signed with a provisioning profile and
+otherwise fail with `-34018`.
+
 Environment variables:
 
 - `CONFIGURATION` sets the configuration of the dotnet commands. It is `Debug`, and `Release` when the `PublishToNuGet` target runs.
-- `ENABLE_COVERAGE=1` collects code coverage in the `DotnetTest` target.
+- `XHARNESS_TARGETS` lists the XHarness targets that `DotnetTest` runs, separated by commas. The default is `ios-simulator-64`;
+  `ios-simulator-64,maccatalyst` adds Mac Catalyst.
 
 The instructions for AI coding assistants are in [`.github/copilot-instructions.md`](.github/copilot-instructions.md), which
 [`AGENTS.md`](AGENTS.md) and [`CLAUDE.md`](CLAUDE.md) point to.
