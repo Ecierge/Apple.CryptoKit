@@ -26,7 +26,10 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <GenerateApplicationManifest>true</GenerateApplicationManifest>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <!-- A file named Entitlements.plist is picked up by every platform, and on iOS it replaces the generated entitlements, which carry
+         the application identifier and the keychain access group: the Keychain then answers errSecMissingEntitlement (-34018).
+         app-sandbox is a macOS key, so the file has a name of its own and only Mac Catalyst uses it -->
+    <CodesignEntitlements Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">Entitlements.MacCatalyst.plist</CodesignEntitlements>
     <CodesignKey>-</CodesignKey>
   </PropertyGroup>
 
