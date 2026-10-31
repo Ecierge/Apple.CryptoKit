@@ -21,9 +21,13 @@ Requirements:
 
 - macOS with [Xcode](https://developer.apple.com/xcode/), because the library and its tests target iOS and Mac Catalyst
 - the [.NET SDK](https://dotnet.microsoft.com/download) that `global.json` pins
-- the `ios` and `maccatalyst` .NET workloads of that SDK. The SDK needs write access to its own folder to install them, so
-  use `sudo dotnet workload install ios maccatalyst` when the SDK is installed system-wide. A new SDK feature band has none
-  of them installed, so install them again after an SDK update that changes the band (`10.0.4xx` to `10.0.5xx`, for example)
+- the `ios` and `maccatalyst` .NET workloads. The SDK needs write access to its own folder to install them, so use
+  `sudo dotnet workload restore src/Apple.CryptoKit.csproj` when the SDK is installed system-wide. A new SDK feature band has no
+  workloads installed, so restore them again after an SDK update that changes the band (`10.0.4xx` to `10.0.5xx`, for example)
+
+.NET for iOS and Mac Catalyst accepts only the Xcode whose major and minor version it was built for, and the workloads are
+published some time after Xcode. `Directory.Build.props` therefore turns the check off (`ValidateXcodeVersion`), so the
+workloads of Xcode 27.1 build with a newer Xcode. Pass `-p:ValidateXcodeVersion=true` to bring the check back.
 
 Build with the [FAKE](https://fake.build) script in `build/`:
 
