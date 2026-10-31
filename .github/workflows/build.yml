@@ -35,6 +35,10 @@ jobs:
           CI: true
           CONFIGURATION: ${{ matrix.configuration }}
           ENABLE_COVERAGE: true
+          # A Mac Catalyst app needs a provisioning profile to write to the Keychain, which the runner does not have yet,
+          # so the tests that write are skipped there until the signing of CI is set up
+          XHARNESS_TARGETS: ios-simulator-64,maccatalyst
+          SKIP_KEYCHAIN_WRITE_TESTS: true
       - name: Build via Windows
         if: runner.os == 'Windows'
         run: ./build.cmd

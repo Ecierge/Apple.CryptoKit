@@ -68,13 +68,16 @@ signing of the repository 6 of the 8 tests fail with `-34018`. To run all of the
 
 4. Run `XHARNESS_TARGETS=maccatalyst ./build.sh DotnetTest`.
 
-A profile that is bound to devices cannot work on the virtual machines of GitHub Actions, so the workflow runs the iOS simulator only.
+A profile that is bound to devices cannot work on the virtual machines of GitHub Actions. The workflow therefore sets
+`SKIP_KEYCHAIN_WRITE_TESTS=true`, which skips the theories that write to the Keychain (`KeychainWriteTheory`) on Mac Catalyst
+and leaves the others. The iOS simulator runs all of them. This is a temporary measure until CI signs the test app.
 
 Environment variables:
 
 - `CONFIGURATION` sets the configuration of the dotnet commands. It is `Debug`, and `Release` when the `PublishToNuGet` target runs.
 - `XHARNESS_TARGETS` lists the XHarness targets that `DotnetTest` runs, separated by commas. The default is `ios-simulator-64`;
   `ios-simulator-64,maccatalyst` adds Mac Catalyst.
+- `SKIP_KEYCHAIN_WRITE_TESTS` set to `true` skips the Keychain write tests on Mac Catalyst when the test app is built.
 
 The instructions for AI coding assistants are in [`.github/copilot-instructions.md`](.github/copilot-instructions.md), which
 [`AGENTS.md`](AGENTS.md) and [`CLAUDE.md`](CLAUDE.md) point to.
