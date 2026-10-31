@@ -44,6 +44,32 @@ app. It installs each app on its target and writes the results into `TestResults
 simulator. Mac Catalyst is opt-in, because its Keychain tests need an app that is signed with a provisioning profile and
 otherwise fail with `-34018`.
 
+### Signing the Mac Catalyst test app
+
+The Keychain accepts the writes of a Mac Catalyst app only when the app is signed with a provisioning profile. With the ad-hoc
+signing of the repository 6 of the 8 tests fail with `-34018`. To run all of them:
+
+1. In the Apple Developer account create an explicit App ID, a certificate of the type Apple Development and a profile of the
+   type macOS App Development for that App ID. The profile lists the Macs it works on, so add this Mac to the devices.
+2. Install the certificate in the login keychain and open the downloaded profile.
+3. Create `tests/Signing.local.props`, which Git ignores:
+
+   ```xml
+   <Project>
+     <PropertyGroup>
+       <ApplicationId>com.example.Apple.CryptoKit.Tests</ApplicationId>
+     </PropertyGroup>
+     <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+       <CodesignKey>Apple Development: Your Name (TEAMMEMBERID)</CodesignKey>
+       <CodesignProvision>Name of the profile</CodesignProvision>
+     </PropertyGroup>
+   </Project>
+   ```
+
+4. Run `XHARNESS_TARGETS=maccatalyst ./build.sh DotnetTest`.
+
+A profile that is bound to devices cannot work on the virtual machines of GitHub Actions, so the workflow runs the iOS simulator only.
+
 Environment variables:
 
 - `CONFIGURATION` sets the configuration of the dotnet commands. It is `Debug`, and `Release` when the `PublishToNuGet` target runs.

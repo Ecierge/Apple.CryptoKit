@@ -436,3 +436,6 @@ docs/
 
 # Local junction to .github/skills, created by Directory.Build.targets
 /.claude/skills
+
+# Machine-local signing of the Mac Catalyst test app
+/tests/Signing.local.props
