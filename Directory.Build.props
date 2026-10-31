@@ -32,6 +32,14 @@ See https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-director
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- .NET for iOS and Mac Catalyst accepts only the Xcode whose major.minor version it was built for. The newest published
+         workloads are 27.1 (iOS) and 27.0 (Mac Catalyst), and both refuse Xcode 27.2 with E0191. They build and run the tests
+         with it, so the check is off until a workload for the installed Xcode is published. Pass -p:ValidateXcodeVersion=true
+         to bring it back -->
+    <ValidateXcodeVersion Condition="'$(ValidateXcodeVersion)' == ''">false</ValidateXcodeVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="/"/>
     <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="/"/>
