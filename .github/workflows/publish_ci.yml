@@ -18,18 +18,18 @@ jobs:
     runs-on: macos-26
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup necessary dotnet SDKs
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
           dotnet-version: |
-            9.x
+            10.x
             8.x
 
       - name: Add the GitHub source
-        run: dotnet nuget add source --name "github.com" "https://nuget.pkg.github.com/fsprojects/index.json"
+        run: dotnet nuget add source --name "github.com" "https://nuget.pkg.github.com/Ecierge/index.json"
 
       - name: Ensure NuGet package source mapping
         shell: pwsh
