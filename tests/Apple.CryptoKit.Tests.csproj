@@ -19,6 +19,10 @@
     <MtouchInterpreter>all</MtouchInterpreter>
     
     <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+
+    <!-- The minimum of Mac Catalyst is 17.0 in .NET for Mac Catalyst 27.0; iOS accepts 15.0 -->
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
     <ApplicationId>com.yourcompany.Apple.CryptoKit.Tests</ApplicationId>
     <ApplicationTitle>Apple.CryptoKit.Tests</ApplicationTitle>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
