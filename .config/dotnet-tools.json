@@ -36,6 +36,13 @@
         "fsdocs"
       ],
       "rollForward": false
+    },
+    "microsoft.dotnet.xharness.cli": {
+      "version": "11.0.0-prerelease.26526.1",
+      "commands": [
+        "xharness"
+      ],
+      "rollForward": false
     }
   }
 }

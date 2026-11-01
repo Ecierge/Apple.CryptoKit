@@ -1,15 +1,73 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <EnableMSTestRunner>true</EnableMSTestRunner>
     <OutputType>Exe</OutputType>
+    <IsTestProject>true</IsTestProject>
+
+    <!-- Disable auto-generated Main method -->
+    <GenerateProgramFile>false</GenerateProgramFile>
+
+    <!-- For mobile frameworks -->
+    <MtouchLink>None</MtouchLink>
+    <MtouchDebug>true</MtouchDebug>
+
+    <!-- Отключим AOT компиляцию для тестов -->
+    <UseInterpreter>true</UseInterpreter>
+    <MtouchInterpreter>all</MtouchInterpreter>
+
+    <!-- The minimum of Mac Catalyst is 17.0 in .NET for Mac Catalyst 27.0; iOS accepts 15.0 -->
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
+    <ApplicationId>com.ecierge.apple.cryptokit.tests</ApplicationId>
+    <ApplicationTitle>Apple.CryptoKit.Tests</ApplicationTitle>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <GenerateApplicationManifest>true</GenerateApplicationManifest>
+    <!-- A file named Entitlements.plist is picked up by every platform, and on iOS it replaces the generated entitlements, which carry
+         the application identifier and the keychain access group: the Keychain then answers errSecMissingEntitlement (-34018).
+         app-sandbox is a macOS key, so the file has a name of its own and only Mac Catalyst uses it -->
+    <CodesignEntitlements Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">Entitlements.MacCatalyst.plist</CodesignEntitlements>
+    <CodesignKey>-</CodesignKey>
+  </PropertyGroup>
+
+  <!-- The Keychain accepts the writes of a Mac Catalyst app only when it is signed with a provisioning profile, which supplies the
+       application identifier. The ad-hoc signing above (CodesignKey -) leaves 6 of 8 tests failing with -34018. A development profile
+       lists the devices it works on, so the signing is a setting of the machine: Signing.local.props is not in the repository and
+       sets ApplicationId, CodesignKey and CodesignProvision for Mac Catalyst (see the README) -->
+  <Import Project="Signing.local.props" Condition="Exists('Signing.local.props')" />
+
+  <!-- SKIP_KEYCHAIN_WRITE_TESTS=true skips the theories that write to the Keychain on Mac Catalyst, where an app without a provisioning
+       profile cannot (see KeychainWriteTheoryAttribute). It is a temporary measure of CI. The iOS simulator is not affected -->
+  <PropertyGroup Condition="'$(SKIP_KEYCHAIN_WRITE_TESTS)' == 'true' And $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+    <DefineConstants>$(DefineConstants);SKIP_KEYCHAIN_WRITE_TESTS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Condition="'$(TargetFramework)' == 'net10.0'" />
+    <PackageReference Include="xunit.runner.visualstudio" Condition="'$(TargetFramework)' == 'net10.0'" />
+    <PackageReference Include="Microsoft.DotNet.XHarness.TestRunners.Common" />
+    <PackageReference Include="Microsoft.DotNet.XHarness.TestRunners.Xunit" />
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../src/Apple.CryptoKit.csproj" />
+  </ItemGroup>
+
+  <!-- Clean stray log files from app bundle root before codesign -->
+  <Target Name="CleanAppBundleRoot" BeforeTargets="Build">
+    <ItemGroup>
+      <!-- Delete any .log files in the app bundle root across architectures -->
+      <FilesToDelete Include="$(OutputPath)**/Apple.CryptoKit.Tests.app/*.log" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" ContinueOnError="true" />
+  </Target>
 
 </Project>
