@@ -4,6 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
+    <Description>.NET bindings of the Apple Keychain for iOS and Mac Catalyst with an API like CngKey to create, open and check RSA keys that are stored in the Keychain.</Description>
     <!--
       Enable trim analyzers for class libraries.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
