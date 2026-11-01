@@ -26,12 +26,18 @@ jobs:
     # If you do not check out your code, Copilot will do this for you.
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup necessary dotnet SDKs
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
           dotnet-version: |
-            9.x
+            10.x
             8.x
+
+      - name: Restore workloads and dependencies
+        # Restores the .NET workloads of the iOS and Mac Catalyst projects and then the solution; the restore also restores the local tools (see Directory.Build.targets)
+        run: |
+          chmod +x ./build.sh
+          ./build.sh DotnetRestore

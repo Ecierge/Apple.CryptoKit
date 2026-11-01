@@ -64,7 +64,7 @@ let mkReleaseNotes changelog (latestEntry : Changelog.ChangelogEntry) gitHubRepo
             | Some desc when desc.Contains (linkReference) -> desc
             | Some desc -> sprintf "%s\n\n%s" (desc.Trim ()) linkReference
 
-        { latestEntry with Description = Some description }.ToString ()
+        { latestEntry with Description = Some description }.ToString()
 
 let getVersionNumber envVarName ctx =
     let args = ctx.Context.Arguments
@@ -171,7 +171,13 @@ let updateChangelog changelogPath (changelog : Fake.Core.Changelog.Changelog) gi
         )
 
     let newChangelog =
-        Changelog.Changelog.New (changelog.Header, changelog.Description, None, newEntry :: changelog.Entries)
+        Changelog.Changelog.New (
+            changelog.Header,
+            changelog.Description,
+            None,
+            newEntry :: changelog.Entries,
+            changelog.References
+        )
 
     // Save changelog to temporary file before making any edits
     changelogBackupFilename <- System.IO.Path.GetTempFileName ()

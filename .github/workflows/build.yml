@@ -13,16 +13,17 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-    runs-on: macos-26
+    # The runner image with Xcode 27 (27.1 is the default): the iOS and Mac Catalyst workloads need the SDK of Xcode 27.1
+    runs-on: xcode-27
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup necessary dotnet SDKs
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
           dotnet-version: |
-            9.x
+            10.x
             8.x
 
       - name: Build via Bash
