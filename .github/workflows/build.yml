@@ -43,7 +43,9 @@ jobs:
           ENABLE_COVERAGE: true
           # A Mac Catalyst app needs a provisioning profile to write to the Keychain, which the runner does not have yet,
           # so the tests that write are skipped there until the signing of CI is set up
-          XHARNESS_TARGETS: ios-simulator-64,maccatalyst
+          # XHarness creates an iPhone 11 Pro for the newest runtime, and the iOS 27.1 runtime of the runner does not support that
+          # device (Incompatible device), so the simulator is pinned to the iOS 27.0 runtime
+          XHARNESS_TARGETS: ios-simulator-64_27.0,maccatalyst
           SKIP_KEYCHAIN_WRITE_TESTS: true
       - name: Build via Windows
         if: runner.os == 'Windows'
