@@ -1,11 +1,16 @@
-namespace Apple.CryptoKit;
+namespace Apple.CryptoKit.Interop;
 
-using System;
 using Foundation;
+using ObjCRuntime;
+using Security;
+using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 [BaseType(typeof(NSObject))]
-interface ACKeychainStorage
+public interface ACKeychainStorage
 {
     [Static]
     [Export("isKeyExist:isPublic:")]
@@ -19,4 +24,3 @@ interface ACKeychainStorage
     [Export("createRSAKeyAnsStoreInkeychain:algorithm:keySize:isKeyPublic:keyUsage:overwrite:")]
     public NSData CreateKey(string keyName, string algorithm, int keySize, bool isPublic, bool keyUsages, bool overwrite);
 }
-
