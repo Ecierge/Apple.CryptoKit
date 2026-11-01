@@ -15,7 +15,8 @@ jobs:
       packages: write
     environment:
       name: nuget
-    runs-on: macos-26
+    # The runner image with Xcode 27 (27.1 is the default): the iOS and Mac Catalyst workloads need the SDK of Xcode 27.1
+    runs-on: xcode-27
 
     steps:
       - uses: actions/checkout@v6
