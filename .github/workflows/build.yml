@@ -32,14 +32,13 @@ jobs:
           xcrun simctl list runtimes
           xcrun simctl list devices available
 
-      # The first start of a simulator on a fresh runner can take longer than the launch timeout of XHarness (the install of the app
-      # hangs while CoreSimulator mounts the runtime), so the device that XHarness would create is created and booted once before
+      # mlaunch of XHarness boots a simulator itself, and on a fresh runner that boot hangs until the launch timeout of XHarness. The
+      # device that XHarness would create is created and booted here, and stays booted, so that XHarness finds it running
       - name: Warm up the iOS simulator
         timeout-minutes: 15
         run: |
           UDID=$(xcrun simctl create "iPhone 11 Pro (iOS 27.0) - created by XHarness" com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro com.apple.CoreSimulator.SimRuntime.iOS-27-0)
           xcrun simctl bootstatus "$UDID" -b
-          xcrun simctl shutdown "$UDID"
 
       - name: Build via Bash
         if: runner.os != 'Windows'
