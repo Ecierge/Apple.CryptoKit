@@ -1,0 +1,8 @@
+{
+    "dotnet.defaultSolution": "Apple.CryptoKit.slnx",
+    "FSharp.fsacRuntime":"netcore",
+    "FSharp.enableAnalyzers": false,
+    "FSharp.analyzersPath": [
+        "./packages/analyzers"
+    ]
+}
