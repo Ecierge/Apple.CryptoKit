@@ -26,6 +26,12 @@ jobs:
             10.x
             8.x
 
+      - name: Show the Xcode and the simulators of the runner
+        run: |
+          xcodebuild -version
+          xcrun simctl list runtimes
+          xcrun simctl list devices available
+
       - name: Build via Bash
         if: runner.os != 'Windows'
         run: |
@@ -46,3 +52,10 @@ jobs:
           CI: true
           CONFIGURATION: ${{ matrix.configuration }}
           ENABLE_COVERAGE: true
+      - name: Upload the test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.configuration }}
+          path: TestResults
+          if-no-files-found: ignore
